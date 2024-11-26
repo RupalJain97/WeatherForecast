@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		5ECC8E8D2CF587D200E01F23 /* Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5ECC8E8C2CF587D200E01F23 /* Config.plist */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		5ECC8DBA2CF5488500E01F23 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		5ECC8DA82CF5488400E01F23 /* WeatherForecast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherForecast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5ECC8DB92CF5488500E01F23 /* WeatherForecastTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherForecastTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5ECC8DC32CF5488500E01F23 /* WeatherForecastUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherForecastUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5ECC8E8C2CF587D200E01F23 /* Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Config.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +80,7 @@
 		5ECC8D9F2CF5488400E01F23 = {
 			isa = PBXGroup;
 			children = (
+				5ECC8E8C2CF587D200E01F23 /* Config.plist */,
 				5ECC8DAA2CF5488400E01F23 /* WeatherForecast */,
 				5ECC8DBC2CF5488500E01F23 /* WeatherForecastTests */,
 				5ECC8DC62CF5488500E01F23 /* WeatherForecastUITests */,
@@ -208,6 +214,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5ECC8E8D2CF587D200E01F23 /* Config.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

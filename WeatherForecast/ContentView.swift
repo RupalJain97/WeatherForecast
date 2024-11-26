@@ -36,13 +36,35 @@ struct ContentView: View {
             }
             .padding()
             
+            // Loading Indicator
+            if viewModel.isLoading {
+                ProgressView("Fetching Weather...")
+                    .padding()
+            }
+            
             if !viewModel.cityName.isEmpty {
-                Text("City: \(viewModel.cityName)")
+                if let errorMessage = viewModel.errorMessage {
+                    Text(errorMessage)
+                        .foregroundColor(.red)
+                        .padding()
+                }else{
+                    AsyncImage(url: viewModel.iconURL) { image in
+                        image.resizable().scaledToFit()
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    .frame(width: 50, height: 50)
                     .padding()
-                Text("Temperature: \(viewModel.temperature)°C")
-                    .padding()
-                Text("Condition: \(viewModel.condition)")
-                    .padding()
+                    
+                    Text("City: \(viewModel.cityName)")
+                        .font(.headline)
+                        .padding()
+                    Text("Temperature: \(String(format: "%.1f", viewModel.temperature))°C")
+                        .padding()
+                    Text("Condition: \(viewModel.condition)")
+                        .padding()
+                }
+                
             }
         }
         .padding()
@@ -52,9 +74,3 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
-
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
-//    }
-//}
