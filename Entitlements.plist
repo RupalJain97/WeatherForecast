@@ -1,9 +1,0 @@
-//
-//  Entitlements.plist
-//  WeatherForecast
-//
-//  Created by Rupal Jain on 11/25/24.
-//
-
-<key>com.apple.security.network.client</key>
-<true/>

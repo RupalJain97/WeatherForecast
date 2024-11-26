@@ -21,8 +21,6 @@ class WeatherViewModel: ObservableObject {
             print("Invalid URL")
             return
         }
-        
-        print("Fetching weather from URL: \(urlString)")
 
         // API Request
         URLSession.shared.dataTask(with: url) { data, response, error in
@@ -40,7 +38,6 @@ class WeatherViewModel: ObservableObject {
                 return
             }
 
-            print("Received Data: \(String(data: data, encoding: .utf8) ?? "Invalid Data")")
             
             do {
                 // Decode JSON response
