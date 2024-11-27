@@ -25,6 +25,8 @@ struct LottieView: UIViewRepresentable {
         view.addSubview(animationView)
         
         NSLayoutConstraint.activate([
+//            animationView.widthAnchor.constraint(equalTo: view.widthAnchor),
+//            animationView.heightAnchor.constraint(equalTo: view.heightAnchor),
             animationView.widthAnchor.constraint(equalTo: view.widthAnchor),
             animationView.heightAnchor.constraint(equalTo: view.heightAnchor)
         ])
