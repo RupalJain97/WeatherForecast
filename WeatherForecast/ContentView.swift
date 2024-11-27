@@ -6,68 +6,30 @@
 //
 
 import SwiftUI
+import Lottie
 
 struct ContentView: View {
-    @State private var city: String = ""
-    @ObservedObject var viewModel = WeatherViewModel()
+    //    @State private var city: String = ""
+    //    @ObservedObject var viewModel = WeatherViewModel()
+    @State private var showMainWeatherView = false
     
     var body: some View {
-        VStack {
-            Image(systemName: "cloud.sun.rain")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            
-            Text("Weather App")
-                .font(.largeTitle)
-                .padding()
-            
-            TextField("Enter city name", text: $city)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-            
-            Button(action: {
-                viewModel.fetchWeather(for: city)
-            }) {
-                Text("Get Weather")
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
-            .padding()
-            
-            // Loading Indicator
-            if viewModel.isLoading {
-                ProgressView("Fetching Weather...")
-                    .padding()
-            }
-            
-            if !viewModel.cityName.isEmpty {
-                if let errorMessage = viewModel.errorMessage {
-                    Text(errorMessage)
-                        .foregroundColor(.red)
-                        .padding()
-                }else{
-                    AsyncImage(url: viewModel.iconURL) { image in
-                        image.resizable().scaledToFit()
-                    } placeholder: {
-                        ProgressView()
+        ZStack {
+            if showMainWeatherView {
+                WeatherView(city: "Cupertino") // Main weather view with default city "Cupertino"
+            } else {
+                SplashView()
+                    .onAppear {
+                        // Delay before showing the main weather screen
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                            withAnimation {
+                                showMainWeatherView = true
+                            }
+                        }
                     }
-                    .frame(width: 50, height: 50)
-                    .padding()
-                    
-                    Text("City: \(viewModel.cityName)")
-                        .font(.headline)
-                        .padding()
-                    Text("Temperature: \(String(format: "%.1f", viewModel.temperature))°C")
-                        .padding()
-                    Text("Condition: \(viewModel.condition)")
-                        .padding()
-                }
-                
             }
         }
-        .padding()
+        
     }
 }
 

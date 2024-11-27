@@ -1,0 +1,9 @@
+Target dependency graph (4 targets)
+Target 'WeatherForecast' in project 'WeatherForecast'
+➜ Implicit dependency on target 'Pods-WeatherForecast' in project 'Pods' via file 'Pods_WeatherForecast.framework' in build phase 'Link Binary'
+➜ Implicit dependency on target 'lottie-ios' in project 'Pods' via options '-framework Lottie' in build setting 'OTHER_LDFLAGS'
+Target 'Pods-WeatherForecast' in project 'Pods'
+➜ Explicit dependency on target 'lottie-ios' in project 'Pods'
+Target 'lottie-ios' in project 'Pods'
+➜ Explicit dependency on target 'lottie-ios-LottiePrivacyInfo' in project 'Pods'
+Target 'lottie-ios-LottiePrivacyInfo' in project 'Pods' (no dependencies)

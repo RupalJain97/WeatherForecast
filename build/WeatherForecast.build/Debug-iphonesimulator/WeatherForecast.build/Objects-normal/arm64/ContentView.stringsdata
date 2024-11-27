@@ -1,0 +1,88 @@
+{
+  "source": "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/WeatherForecast/ContentView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Weather App",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 24
+        }
+      },
+      {
+        "comment": "",
+        "key": "City: %@",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 63
+        }
+      },
+      {
+        "comment": "",
+        "key": "Temperature: %@°C",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 66
+        }
+      },
+      {
+        "comment": "",
+        "key": "Condition: %@",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 68
+        }
+      },
+      {
+        "comment": "",
+        "key": "Humidity: %lld%%",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 70
+        }
+      },
+      {
+        "comment": "",
+        "key": "Wind Speed: %@ m/s",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 72
+        }
+      },
+      {
+        "comment": "",
+        "key": "Visibility: %@ km",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 74
+        }
+      },
+      {
+        "comment": "",
+        "key": "Enter city name",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 28
+        }
+      },
+      {
+        "comment": "",
+        "key": "Fetching Weather...",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 45
+        }
+      },
+      {
+        "comment": "",
+        "key": "Get Weather",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 35
+        }
+      }
+    ]
+  },
+  "version": 1
+}

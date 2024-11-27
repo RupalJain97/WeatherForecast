@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<!--
-   Config.plist
-   WeatherForecast
-
-   Created by Rupal Jain on 11/25/24.
-   Copyright (c) 2024 ___ORGANIZATIONNAME___. All rights reserved.
--->
 <plist version="1.0">
-<dict/>
+<dict>
+	<key>APIKey</key>
+	<string>8cb5733e1cd54ac2a23cd20fc666945f</string>
+</dict>
 </plist>
