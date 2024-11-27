@@ -1,0 +1,68 @@
+{
+  "" : {
+    "diagnostics" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherForecast-master.dia",
+    "emit-module-dependencies" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherForecast-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherForecast-master-emit-module.dia",
+    "swift-dependencies" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherForecast-master.swiftdeps"
+  },
+  "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/WeatherForecast/ContentView.swift" : {
+    "const-values" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/ContentView.swiftconstvalues",
+    "dependencies" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/ContentView.d",
+    "diagnostics" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/ContentView.dia",
+    "index-unit-output-path" : "/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/ContentView.o",
+    "llvm-bc" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/ContentView.bc",
+    "object" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/ContentView.o",
+    "swift-dependencies" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/ContentView.swiftdeps",
+    "swiftmodule" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/ContentView~partial.swiftmodule"
+  },
+  "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/WeatherForecast/LottieView.swift" : {
+    "const-values" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/LottieView.swiftconstvalues",
+    "dependencies" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/LottieView.d",
+    "diagnostics" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/LottieView.dia",
+    "index-unit-output-path" : "/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/LottieView.o",
+    "llvm-bc" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/LottieView.bc",
+    "object" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/LottieView.o",
+    "swift-dependencies" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/LottieView.swiftdeps",
+    "swiftmodule" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/LottieView~partial.swiftmodule"
+  },
+  "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/WeatherForecast/WeatherForecastApp.swift" : {
+    "const-values" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherForecastApp.swiftconstvalues",
+    "dependencies" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherForecastApp.d",
+    "diagnostics" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherForecastApp.dia",
+    "index-unit-output-path" : "/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherForecastApp.o",
+    "llvm-bc" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherForecastApp.bc",
+    "object" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherForecastApp.o",
+    "swift-dependencies" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherForecastApp.swiftdeps",
+    "swiftmodule" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherForecastApp~partial.swiftmodule"
+  },
+  "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/WeatherForecast/WeatherModel/WeatherModel.swift" : {
+    "const-values" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherModel.swiftconstvalues",
+    "dependencies" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherModel.d",
+    "diagnostics" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherModel.dia",
+    "index-unit-output-path" : "/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherModel.o",
+    "llvm-bc" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherModel.bc",
+    "object" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherModel.o",
+    "swift-dependencies" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherModel.swiftdeps",
+    "swiftmodule" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherModel~partial.swiftmodule"
+  },
+  "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/WeatherForecast/WeatherViewModel/WeatherViewModel.swift" : {
+    "const-values" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherViewModel.swiftconstvalues",
+    "dependencies" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherViewModel.d",
+    "diagnostics" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherViewModel.dia",
+    "index-unit-output-path" : "/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherViewModel.o",
+    "llvm-bc" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherViewModel.bc",
+    "object" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherViewModel.o",
+    "swift-dependencies" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherViewModel.swiftdeps",
+    "swiftmodule" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/WeatherViewModel~partial.swiftmodule"
+  },
+  "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/jainrupal/Desktop/GitHub-Projects/WeatherForecast/build/WeatherForecast.build/Debug-iphonesimulator/WeatherForecast.build/Objects-normal/arm64/GeneratedAssetSymbols~partial.swiftmodule"
+  }
+}
