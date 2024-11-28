@@ -25,7 +25,7 @@ struct SplashView: View {
                             .ignoresSafeArea()
                 
                 VStack {
-                    LottieView(name: "Animation - 1732614429229")
+                    LottieView(name: "Animation-appicon")
                         .frame(width: 200, height: 200)
                         .padding()
                     

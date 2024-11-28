@@ -9,8 +9,6 @@ import SwiftUI
 import Lottie
 
 struct ContentView: View {
-    //    @State private var city: String = ""
-    //    @ObservedObject var viewModel = WeatherViewModel()
     @State private var showMainWeatherView = false
     
     var body: some View {

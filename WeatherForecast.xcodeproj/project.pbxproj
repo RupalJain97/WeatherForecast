@@ -48,25 +48,9 @@
 		F852FDFB23A467283F4A17FE /* Pods-WeatherForecastTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherForecastTests.release.xcconfig"; path = "Target Support Files/Pods-WeatherForecastTests/Pods-WeatherForecastTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		5E3201602CF707B8007FD2B3 /* Exceptions for "WeatherForecast" folder in "WeatherForecast" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"Animations/Animation - 1732614175447.dataset/Animation - 1732614175447.json",
-				"Animations/Animation - 1732614175447.dataset/Contents.json",
-				"Animations/Animation - 1732614429229.dataset/Animation - 1732614429229.json",
-				"Animations/Animation - 1732614429229.dataset/Contents.json",
-			);
-			target = 5ECC8DA72CF5488400E01F23 /* WeatherForecast */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5ECC8DAA2CF5488400E01F23 /* WeatherForecast */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				5E3201602CF707B8007FD2B3 /* Exceptions for "WeatherForecast" folder in "WeatherForecast" target */,
-			);
 			path = WeatherForecast;
 			sourceTree = "<group>";
 		};

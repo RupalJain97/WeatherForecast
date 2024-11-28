@@ -9,14 +9,18 @@ import SwiftUI
 
 struct WeatherView: View {
     @ObservedObject var viewModel = WeatherViewModel()
-    var city: String
+    var city: String = "Cupertino"
     
     var body: some View {
         ZStack {
-            // Background changes based on weather condition
-            LinearGradient(gradient: viewModel.weatherBackgroundGradient(),
-                           startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
+            
+            LottieView(name: viewModel.background)
+                .edgesIgnoringSafeArea(.top
+            
+            
+            //            LinearGradient(gradient: viewModel.weatherBackgroundGradient(),
+            //                           startPoint: .top, endPoint: .bottom)
+            //            .edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 16) {
                 
@@ -65,7 +69,7 @@ struct WeatherView: View {
                                 .shadow(color: .black, radius: 2, x: 0, y: 2)
                             
                             
-                            Text(viewModel.cityName)
+                            Text(viewModel.cityNameFull)
                                 .font(.system(size: 23, weight: .semibold))
                                 .padding(.top)
                                 .foregroundColor(.white)
@@ -100,9 +104,17 @@ struct WeatherView: View {
                                 .scaleEffect(viewModel.isLoading ? 1.5 : 1.0)
                                 .animation(.easeInOut, value: viewModel.isLoading)
                             
-                            Image(systemName: viewModel.condition == "Rain" ? "cloud.rain.fill" : "sun.max.fill")
-                                .foregroundColor(viewModel.condition == "Rain" ? .gray : .yellow)
-                                .font(.system(size: 20))
+                            //                            Image(systemName: viewModel.weatherDescription == "Rain" ? "cloud.rain.fill" : "sun.max.fill")
+                            //                                .foregroundColor(viewModel.condition == "Rain" ? .gray : .yellow)
+                            //                                .font(.system(size: 20))
+                            
+                            AsyncImage(url: viewModel.iconURL) { image in
+                                image.resizable().scaledToFit()
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            .frame(width: 50, height: 50)
+                            .font(.system(size: 20))
                             
                         }
                         .padding(.top, 20)

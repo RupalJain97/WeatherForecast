@@ -10,30 +10,36 @@ struct WeatherResponse: Decodable {
 }
 
 struct WeatherForcastResponse: Decodable {
-    let data: [WeatherForecast]
+    let data: [WeatherForecastData]
 }
 
-struct WeatherForecast: Decodable {
+struct WeatherForecastData: Decodable {
     let temp: Double
     let datetime: String
     let weather: WeatherCondition
 }
 
+//                        let wind_cdir_full: String
+//                        let wind_cdir: String
+//                        let clouds : Int
+
 struct WeatherData: Decodable {
     let city_name: String
     let temp: Double
     let weather: WeatherCondition
-    let humidity: Double
+    let rh: Double
     let wind_spd: Double
-    let wind_cdir_full: String
-    let wind_cdir: String
     let vis: Double
     let sunrise: String
-    let timezone : String
-    let clouds : Int
+    let sunset: String
+    let country_code : String
+    let state_code : String
+    let precip: Double
+    let ts: Int64
 }
 
 struct WeatherCondition: Decodable {
     let icon: String
     let description: String
+    let code: Int
 }
