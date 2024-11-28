@@ -149,6 +149,10 @@ class WeatherViewModel: ObservableObject {
                 return
             }
             
+            DispatchQueue.main.async {
+                self.background = "clear_day" // Default animation if no data
+            }
+            
             //            print("Received Data: \(String(data: data, encoding: .utf8) ?? "Invalid Data")")
             
             do {
@@ -215,20 +219,25 @@ class WeatherViewModel: ObservableObject {
         }.resume()
     }
     
-    //    func fetchWeather(for city: String) {
-    //            // Hardcoded data for now
-    //            DispatchQueue.main.async {
-    //                self.cityName = "Cupertino"
-    //                self.temperature = 23.0
-    //                self.weatherDescription = "Clear Sky"
-    //                self.sunrise = "06:30 AM"
-    //                self.sunset = "05:45 PM"
-    //                self.windSpeed = 3.0
-    //                self.animationName = "sunny"
-    //                self.datetime = "Wed, Apr 27, 3:38 PM"
-    //            }
-    //        }
-    //
+    // Dynamic mapping for weather backgrounds
+    private func mapConditionToBackground2(_ condition: String) -> String {
+        switch condition.lowercased() {
+        case "clear sky":
+            return "Background-sunny"
+        case "few clouds", "scattered clouds", "broken clouds":
+            return "Background-cloudy"
+        case "rain", "shower rain":
+            return "Background-rainy"
+        case "snow":
+            return "Background-snowy"
+        case "thunderstorm":
+            return "Background-thunderstorm"
+        case "mist", "fog":
+            return "Background-foggy"
+        default:
+            return "Background-default"
+        }
+    }
     
     func weatherBackgroundGradient() -> Gradient {
         if weatherDescription.contains("Clear") {
@@ -313,7 +322,7 @@ class WeatherViewModel: ObservableObject {
         case  "s04d","s04n": return "Mix snow/rain"
         case  "s05d","s05n": return "Sleet"
             //            case  "s05d","s05n": return "Heavy sleet"
-//        case  "s01d","s01n": return "Snow shower"
+            //        case  "s01d","s01n": return "Snow shower"
             //            case  "s02d","s02n": return "Heavy snow shower"
         case  "s06d","s06n": return "Flurries"
         case  "a01d","a01n": return "Mist"
