@@ -18,7 +18,8 @@ class WeatherViewModel: ObservableObject {
     @Published var sunset: String = ""
     @Published var errorMessage: String? = nil
     @Published var isLoading: Bool = false
-    @Published var background: String = "Animation-night"
+    @Published var background: String = "Background-sunny"
+    @Published var backgroundicon: String = "Background-sunny"
     @Published var datetime: String = "default"
     @Published var humidity: Int = 0
     @Published var windSpeed: Double = 0.0
@@ -27,6 +28,7 @@ class WeatherViewModel: ObservableObject {
     //                        @Published var animationName: String = "default"
     @Published var iconURL: URL? = nil
     @Published var forecast: [WeatherForecastData] = []
+    @Published var highlowicon: String = "None"
     
     // Lottie Animation Mapping
     private let lottieAnimations: [String: String] = [
@@ -47,9 +49,9 @@ class WeatherViewModel: ObservableObject {
         
         // Set background animation based on the time of day
         if currentHour >= 19 || currentHour < 5 { // Between 7 PM and 5 AM
-            self.background = "Animation-night"
+            self.background = "Background-night"
         } else {
-            self.background = "Animation-sunny"
+            self.background = "Background-sunny-wind"
         }
     }
     
@@ -68,6 +70,26 @@ class WeatherViewModel: ObservableObject {
         }
         return apiKey
     }
+    
+    func getWeatherIcon(for temperature: Double) -> String {
+        switch temperature {
+        case ..<0: // Below 0°C (Freezing weather)
+            return "snowflake.circle.fill"
+        case 0..<5: // 0°C to 5°C (Very cold weather)
+            return "thermometer.snowflake"
+        case 5..<15: // 5°C to 15°C (Cool weather)
+            return "cloud.fill"
+        case 15..<25: // 15°C to 25°C (Mild/comfortable weather)
+            return "sun.max.fill"
+        case 25..<30: // 25°C to 30°C (Warm weather)
+            return "thermometer.sun.fill"
+        case 30..<35: // 30°C to 35°C (Hot weather)
+            return "thermometer.high"
+        default: // Above 35°C (Very hot weather)
+            return "sun.max.trianglebadge.exclamationmark.fill" 
+        }
+    }
+    
     
     // Determine background color based on weather condition
     //    func backgroundColor() -> Color {
@@ -151,6 +173,7 @@ class WeatherViewModel: ObservableObject {
             
             DispatchQueue.main.async {
                 self.background = "clear_day" // Default animation if no data
+                self.backgroundicon = ""
             }
             
             //            print("Received Data: \(String(data: data, encoding: .utf8) ?? "Invalid Data")")
@@ -171,6 +194,7 @@ class WeatherViewModel: ObservableObject {
                         self.visibility = weather.vis
                         self.weatherDescription = weather.weather.description
                         self.background = self.mapConditionToBackground(weather.weather.icon)
+                        self.backgroundicon = self.mapConditionToBackgroundIcon(weather.weather.icon)
                         self.sunset = weather.sunset
                         self.sunrise = weather.sunrise
                         self.precipitation = weather.precip
@@ -235,7 +259,13 @@ class WeatherViewModel: ObservableObject {
         case "mist", "fog":
             return "Background-foggy"
         default:
-            return "Background-default"
+            let currentHour = Calendar.current.component(.hour, from: Date())
+            if currentHour >= 19 || currentHour < 5 {
+                return "Background-night"
+            } else {
+                return "Background-sunny-wind"
+            }
+            
         }
     }
     
@@ -259,9 +289,10 @@ class WeatherViewModel: ObservableObject {
         case "r03d","r03n": return "cloud.heavyrain"
         case "f01d","f01n","r04d","r04n","r05d","r05n","r06d","r06n": return "cloud.rain"
         case "s01d","s01n","s02d","s02n","s03d","s03n","s04d","s04n": return "cloud.snow"
-        case "s05d","s05n": return "cloud.sleet"
-        case "a01d","a01n","a02d","a02n","a03d","a03n","a04d","a04n","a05d","a05n","a06d","a06n": return "smoke"
-        case "c01d","c01n": return "sun.max"
+        case "s05d","s05n","s06d","s06n","a05d","a05n","a06d","a06n": return "cloud.sleet"
+        case "a01d","a01n","a02d","a02n","a03d","a03n","a04d","a04n": return "smoke"
+        case "c01d": return "sun.max"
+        case "c01n": return "moon.fill"
         case "c02d", "c02n","c03d","c03n": return "cloud.sun"
         case "c04d","c04n": return "smoke"
         default:
@@ -270,29 +301,58 @@ class WeatherViewModel: ObservableObject {
         
     }
     
-    private func mapConditionToBackground(_ icon: String) -> String {
-        //        TODO
+    
+    private func mapConditionToBackgroundIcon(_ icon: String) -> String {
         switch icon
         {
+        case "t01d","t02d","t03d","t01n","t02n","t03n" : return "Background-thunder"
+        case "t04d","t04n","t05d","t05n": return "Background-thunder"
+        case "d01d","d01n","d02d","d02n","d03d","d03n": return "Background-clouds"
+        case "r01d", "r01n","r02d","r02n": return "Background-clouds"
+        case "r03d","r03n": return "Background-clouds"
+        case "f01d","f01n","r04d","r04n","r05d","r05n","r06d","r06n": return "Background-clouds"
+        case "s01d","s01n","s02d","s02n","s03d","s03n","s04d","s04n": return "Background-snow"
+        case "s05d","s05n","s06d","s06n","a05d","a05n","a06d","a06n" : return "Background-snow"
+        case "a01d","a01n","a02d","a02n","a03d","a03n","a04d","a04n": return "Background-smoke"
+        case "c02d", "c02n","c03d","c03n": return "Background-clouds"
+        case "c04d","c04n": return "None"
+        default:
+            return "None"
+        }
+        
+    }
+    
+    private func mapConditionToBackground(_ icon: String) -> String {
+        switch icon
+        {
+            //            Normal
+        case "c01n" : return "Background-night"
+        case "c01d" : return "Background-sunny"
             
-        case "t01n","t02n","t03n", "r01n","r02n", "r03n"
-            ,"f01n","r04n","r05n","r06n": return "Animation-night-rain"
-        case "c01n" : return "Animation-night"
-            //            Night
-        case "s01n","s02n","s03n","s04n","s05n" : return "Animation-snow"
-            //            Day
-        case "s01d","s02d","s03d","s04d","s05d" : return "Animation-snow2"
-        case "c01d" : return "Animation-sunny"
-        case "t04d","t04n","t05d","t05n", "d01d","d01n","d02d","d02n","d03d","d03n", "f01d","r04d", "r05d","r06d" : return "Animation-thunderstrom"
+            //            Rain
+        case "r01n","r02n", "r03n","r04n","r05n","r06n","d01n","d03n","d02n","f01n": return "Background-rain"
+        case "r01d","r02d", "r03d","r04d", "r05d","r06d","d01d","d02d","d03d", "f01d" : return "Background-rain"
             
-            //        To be added
-        case "t01d","t02d","t03d","r01d","r02d", "r03d" : return "Animation-sunny-rain"
-        case "a01d","a01n","a02d","a02n","a03d","a03n","a04d","a04n","a05d","a05n","a06d","a06n": return "smoke"
-        case "c02d", "c02n","c03d","c03n": return "cloud.sun"
-        case "c04d","c04n": return "smoke"
+        case "c02d", "c02n","c03d","c03n": return "Background-light-cloud"
+        case "a01d","a01n","a02d","a02n","a03d","a03n","a04d","a04n", "c04d","c04n": return "Background-sunny-wind"
+            
+            //          Snow
+        case "s01n","s02n","s03n","s04n","s05n", "s06n","a05d","a06n" : return "Background-night-snow"
+        case "s01d","s02d","s03d","s04d","s05d", "s06d","a05n","a06d" : return "Background-snow"
+            
+            
+            //            Thunderstrom
+        case "t01n","t02n","t03n","t04n","t05n": return "Background-thunderstrom"
+        case "t01d","t02d","t03d","t04d","t05d"  : return "Background-thunderstrom"
+            
             
         default:
-            return "cloud"
+            let currentHour = Calendar.current.component(.hour, from: Date())
+            if currentHour >= 19 || currentHour < 5 {
+                return "Background-night"
+            } else {
+                return "Background-sunny-wind"
+            }
         }
         
     }

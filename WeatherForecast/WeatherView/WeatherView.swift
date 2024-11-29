@@ -18,17 +18,19 @@ struct WeatherView: View {
             //            .edgesIgnoringSafeArea(.all)
             
             ZStack{
-                Image("Background-light-cloud")
+                Image(viewModel.background)
                     .resizable()
                     .scaledToFill()
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                     .clipped()
                     .edgesIgnoringSafeArea(.all)
+                    .opacity(0.5)
                 
-                LottieView(name: "Background-clouds")
+                LottieView(name: viewModel.backgroundicon)
                     .ignoresSafeArea()
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height )
                     .frame(alignment: .bottom)
+                    .opacity(0.5)
                 
                 VStack(spacing: 16) {
                     
@@ -42,9 +44,9 @@ struct WeatherView: View {
                                 .cornerRadius(10)
                                 .overlay(
                                     Rectangle()
-                                        .frame(height: 1) // Height of the bottom border
+                                        .frame(height: 1)
                                         .foregroundColor(.white)
-                                        .padding(.top, 20), // Position the border at the bottom
+                                        .padding(.top, 20),
                                     alignment: .bottom
                                 )
                                 .autocapitalization(.none)
@@ -64,7 +66,6 @@ struct WeatherView: View {
                             }
                         }
                         .padding(.horizontal, 20)
-                        //                        .padding(.top, 20)
                         
                         VStack{
                             HStack {
@@ -87,6 +88,7 @@ struct WeatherView: View {
                             Text(viewModel.datetime)
                                 .font(.subheadline)
                                 .foregroundColor(.white)
+                                .fontWeight(.semibold)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.leading, 5)
                             
@@ -94,17 +96,19 @@ struct WeatherView: View {
                         .padding(.leading, 20)
                         .padding(.top, 0)
                     }
+                    .padding(.top, 28)
                     
                     
                     // Main Weather Information
-                    VStack {
+                    VStack  {
                         
                         VStack{
                             HStack{
-                                Image(systemName: "thermometer")
+                                Image(systemName: viewModel.highlowicon)
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 30, height: 30)
+//                                    .font(.system(size: 50))
                                     .foregroundColor(.red)
                                 
                                 Text("\(String(format: "%.1f", viewModel.temperature))°")
@@ -140,8 +144,11 @@ struct WeatherView: View {
                             WeatherDetailView(icon: "wind", title: "\(viewModel.windSpeed)m/s")
                         }
                     }
+                    .padding(.top, 70)
                 }
-                .padding(.top, -45)
+                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.8)
+                .padding(.top, 45)
+                
             }
             .scaledToFit()
             .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.7)
