@@ -31,10 +31,14 @@ struct WeatherView: View {
             
             
             if !viewModel.backgroundicon.isEmpty {
-                LottieView(name: viewModel.backgroundicon)
-                    .ignoresSafeArea()
-                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height )
-                    .frame(alignment: .bottom)
+                VStack{
+                    LottieView(name: viewModel.backgroundicon)
+                        .ignoresSafeArea()
+                        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .top)
+                        .offset(y: -120)
+                        .opacity(0.7)
+                }
+                
             }
             
             VStack(spacing: 0) {
@@ -45,7 +49,7 @@ struct WeatherView: View {
                         // Top section with search bar
                         HStack {
                             TextField("Enter city name", text: $viewModel.cityName)
-                                .foregroundColor(.black)
+                                .foregroundColor(Color.customWhite)
                                 .padding(10)
                                 .font(.system(size: 18, weight: .semibold, design: .serif))
                                 .cornerRadius(10)
@@ -77,7 +81,7 @@ struct WeatherView: View {
                         VStack(alignment: .leading, spacing: 8){
                             HStack {
                                 Image(systemName: "mappin.and.ellipse")
-                                    .foregroundColor(.white)
+                                    .foregroundColor(viewModel.isDarkMode ? .white : Color.customWhite)
                                     .font(.title2)
                                     .scaledToFit()
                                     .frame(width: 35, height: 30)
@@ -88,13 +92,13 @@ struct WeatherView: View {
                                 Text(viewModel.cityNameFull)
                                     .font(.system(size: 23, weight: .semibold))
                                     .padding(.top)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(viewModel.isDarkMode ? .white : Color.customWhite)
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
                             
                             Text(viewModel.datetime)
                                 .font(.subheadline)
-                                .foregroundColor(.white)
+                                .foregroundColor(viewModel.isDarkMode ? .white : Color.customWhite)
                                 .fontWeight(.semibold)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.leading, 5)
@@ -119,11 +123,11 @@ struct WeatherView: View {
                                 .scaledToFit()
                                 .frame(width: 50, height: 50)
                             //                                    .font(.system(size: 50))
-                                .foregroundColor(viewModel.thermometerColor(for: viewModel.temperature))
+                                .foregroundColor(viewModel.thermometerColor(for: viewModel.highlowicon))
                             
                             Text("\(viewModel.temperature)°")
                                 .font(.system(size: 58, weight: .bold))
-                                .foregroundColor(.white)
+                                .foregroundColor(viewModel.isDarkMode ? .white : Color.customWhite)
                                 .scaleEffect(viewModel.isLoading ? 1.5 : 1.0)
                                 .animation(.easeInOut, value: viewModel.isLoading)
                                 .scaledToFit()
@@ -149,19 +153,19 @@ struct WeatherView: View {
                         Text(viewModel.weatherDescription)
                             .font(.system(size: 20))
                             .fontWeight(.semibold)
-                            .foregroundColor(.white)
+                            .foregroundColor(viewModel.isDarkMode ? .white : .black)
                         
                         HStack (spacing: 25) {
-                            WeatherDetailView(icon: "wind", title: "\(viewModel.windSpeed)mph")
-                            WeatherDetailView(icon: "humidity.fill", title: "\(viewModel.humidity)%")
-                            WeatherDetailView(icon: "eye.fill", title: "\(viewModel.visibility) mi")
-                            WeatherDetailView(icon: "cloud.rain.fill", title: "\(viewModel.precipitation)''")
+                            WeatherDetailView(icon: "wind", title: "\(viewModel.windSpeed)mph", color: viewModel.isDarkMode ? .white : Color.customWhite, colorText: viewModel.isDarkMode ? .white : Color.customWhite)
+                            WeatherDetailView(icon: "humidity.fill", title: "\(viewModel.humidity)%", color: viewModel.isDarkMode ? .white : Color.customWhite, colorText: viewModel.isDarkMode ? .white : Color.customWhite)
+                            WeatherDetailView(icon: "eye.fill", title: "\(viewModel.visibility) mi", color: viewModel.isDarkMode ? .white : Color.customWhite, colorText: viewModel.isDarkMode ? .white : Color.customWhite)
+                            WeatherDetailView(icon: "cloud.rain.fill", title: "\(viewModel.precipitation)''", color: viewModel.isDarkMode ? .white : Color.customWhite, colorText: viewModel.isDarkMode ? .white : Color.customWhite)
                         }
                         .padding(.top, 20)
                         
                         HStack (spacing: 25) {
-                            WeatherDetailView(icon: "sunrise.fill", title: "\(viewModel.sunrise)")
-                            WeatherDetailView(icon: "sunset.fill", title: "\(viewModel.sunset)")
+                            WeatherDetailView(icon: "sunrise.fill", title: "\(viewModel.sunrise)", color: viewModel.isDarkMode ? .white : Color.customSun, colorText: viewModel.isDarkMode ? .white : .black)
+                            WeatherDetailView(icon: "sunset.fill", title: "\(viewModel.sunset)", color: viewModel.isDarkMode ? .white : Color.customSunset, colorText: viewModel.isDarkMode ? .white : .black)
                         }
                         .padding(.top, 20)
                         //                        .padding(.bottom, .infinity)
@@ -188,9 +192,6 @@ struct WeatherView: View {
                                     ForEach(viewModel.forecast, id: \.datetime) { forecast in
                                         WeatherForecastView(day: viewModel.formatDate(forecast.datetime), icon: URL(string: "https://www.weatherbit.io/static/img/icons/\(forecast.weather.icon).png"), temp: "\(forecast.temp)°")
                                         }
-//                                    WeatherForecastView(day: viewModel.forecast, icon: "sun.max.fill", temp: "13.5°")
-//                                    WeatherForecastView(day: "Apr 29", icon: "cloud.fill", temp: "13.4°")
-//                                    WeatherForecastView(day: "Apr 30", icon: "cloud.sun.fill", temp: "13.5°")
                                 }
                                 .padding(.bottom, 40)
                             }
@@ -205,8 +206,10 @@ struct WeatherView: View {
             
         }
         .scaledToFit()
+        .preferredColorScheme(viewModel.isDarkMode ? .dark : .light)
         .onAppear {
             viewModel.fetchWeather(for: city)
+            viewModel.updateColorScheme()
         }
         
     }
@@ -215,6 +218,8 @@ struct WeatherView: View {
 struct WeatherDetailView: View {
     let icon: String
     let title: String
+    let color: Color
+    let colorText: Color
     
     var body: some View {
         VStack (spacing: 5) {
@@ -222,11 +227,11 @@ struct WeatherDetailView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 30, height: 30)
-                .foregroundColor(.white)
+                .foregroundColor(color)
             
             Text(title)
                 .font(.system(size: 15, weight: .semibold, design: .rounded))
-                .foregroundColor(.white)
+                .foregroundColor(colorText)
                 .multilineTextAlignment(.center)
         }
     }
@@ -270,5 +275,5 @@ struct WeatherForecastView: View {
 }
 
 #Preview {
-    WeatherView(city: "Cupertino")
+    WeatherView(city: "Delhi")
 }
