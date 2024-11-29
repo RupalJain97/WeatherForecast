@@ -14,8 +14,7 @@ struct SplashView: View {
     var body: some View {
         
         if isActive {
-            WeatherView(city: "Cupertino") 
-//            ScenicBackgroundView()
+            WeatherView(city: "Cupertino")
         } else {
             ZStack{
                 LinearGradient(

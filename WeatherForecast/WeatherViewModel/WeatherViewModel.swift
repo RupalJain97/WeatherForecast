@@ -10,23 +10,33 @@ import SwiftUI
 
 // ViewModel to handle API calls and data
 class WeatherViewModel: ObservableObject {
-    @Published var cityName: String = "San Jose"
-    @Published var cityNameFull: String = "San Jose, CA, US"
-    @Published var temperature: Double = 0.0
+    @Published var cityName: String = "Cupertino"
+    @Published var cityNameFull: String = "Cupertino, CA, US"
+    @Published var temperature: Int = 0
     @Published var weatherDescription: String = ""
     @Published var sunrise: String = ""
     @Published var sunset: String = ""
     @Published var errorMessage: String? = nil
     @Published var isLoading: Bool = false
-    @Published var background: String = "Animation-night"
-    @Published var datetime: String = "default"
+    @Published var background: String = "Background-sunny"
+    @Published var backgroundicon: String = "Background-clouds"
+    @Published var datetime: String = ""
     @Published var humidity: Int = 0
-    @Published var windSpeed: Double = 0.0
-    @Published var visibility: Double = 0.0
-    @Published var precipitation: Double = 0.0
+    @Published var windSpeed: Int = 0
+    @Published var visibility: Int = 0
+    @Published var precipitation: Int = 0
     //                        @Published var animationName: String = "default"
     @Published var iconURL: URL? = nil
     @Published var forecast: [WeatherForecastData] = []
+    @Published var highlowicon: String = "sun.max.fill"
+    
+    init() {
+        updateIcon()
+    }
+    
+    func updateIcon() {
+        highlowicon = checkTime() == "night" ? "moon.stars.fill" : "sun.max.fill"
+    }
     
     // Lottie Animation Mapping
     private let lottieAnimations: [String: String] = [
@@ -42,22 +52,52 @@ class WeatherViewModel: ObservableObject {
         "partly-cloudy-night": "partly_cloudy_night"
     ]
     
-    func updateBackgroundBasedOnTime() {
+    func checkTime() -> String {
         let currentHour = Calendar.current.component(.hour, from: Date())
         
         // Set background animation based on the time of day
         if currentHour >= 19 || currentHour < 5 { // Between 7 PM and 5 AM
-            self.background = "Animation-night"
+            return "night"
         } else {
-            self.background = "Animation-sunny"
+            return "day"
         }
     }
     
-    func formatUnixTimestamp(_ timestamp: Int64) -> String {
+    func updateBackgroundBasedOnTime() {
+        if checkTime() == "night" {
+            self.background = "Background-night"
+        } else {
+            self.background = "Background-sunny-wind"
+        }
+    }
+    
+    func formatUnixTimestamp(_ timestamp: Int64, timeZone: String) -> String {
         let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
         let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(identifier: timeZone)
         dateFormatter.dateFormat = "E, MMM d, h:mm a"
         return dateFormatter.string(from: date)
+    }
+    
+    func convertTimeToUserTimezone(utcTime: String, timezoneIdentifier: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC") // Input is UTC
+        
+        guard let date = dateFormatter.date(from: utcTime) else {
+            print("Invalid time format")
+            return "Default"
+        }
+        
+        // Convert to user's timezone
+        if let userTimezone = TimeZone(identifier: timezoneIdentifier) {
+            dateFormatter.timeZone = userTimezone
+            dateFormatter.dateFormat = "h:mm a" // Desired output format
+            return dateFormatter.string(from: date)
+        } else {
+            print("Invalid timezone identifier")
+            return "Default"
+        }
     }
     
     func getAPIKey() -> String {
@@ -67,6 +107,58 @@ class WeatherViewModel: ObservableObject {
             fatalError("Unable to find APIKey in Config.plist")
         }
         return apiKey
+    }
+    
+    func getWeatherIcon(_ temperature: Int) -> String {
+        switch temperature {
+        case ..<0: // Below 0°C (Freezing weather)
+            return "snowflake.circle.fill"
+        case 0..<5: // 0°C to 5°C (Very cold weather)
+            return "thermometer.snowflake"
+        case 5..<15: // 5°C to 15°C (Cool weather)
+            return "thermometer.low"
+        case 15..<25: // 15°C to 25°C (Mild/comfortable weather)
+            return "thermometer.medium"
+        case 25..<30: // 25°C to 30°C (Warm weather)
+            return "thermometer.sun.fill"
+        case 30...: // 30°C onwards (Hot weather)
+            return "thermometer.high"
+        default: // Above 35°C (Very hot weather)
+            if checkTime() == "night" { // Between 7 PM and 5 AM
+                return "moon.stars.fill"
+            }
+            return "sun.max.fill"
+        }
+    }
+    
+    func thermometerColor(for temperature: Int) -> Color {
+        switch temperature {
+        case ..<0:
+            return .blue
+        case 0..<15:
+            return .blue
+        case 15..<30:
+            return .green
+        case 30...:
+            return .red
+        default:
+            return .gray
+        }
+    }
+    
+    func convertKmToMi(_ kilometers: Int) -> Int {
+        let miles = Double(kilometers) * 0.621371
+        return Int(round(miles))
+    }
+    
+    func convertMmToIn(_ millimeters: Int) -> Int {
+        let inches = Double(millimeters) * 0.0393701
+        return Int(round(inches))
+    }
+    
+    func convertMpsToMph(_ metersPerSecond: Double) -> Int {
+        let mph = metersPerSecond * 2.23694
+        return Int(round(mph * 10))
     }
     
     // Determine background color based on weather condition
@@ -150,7 +242,8 @@ class WeatherViewModel: ObservableObject {
             }
             
             DispatchQueue.main.async {
-                self.background = "clear_day" // Default animation if no data
+                self.background = self.checkTime() == "night" ? "Background-night" : "Background-sunny-wind" // Default animation if no data
+                self.backgroundicon = ""
             }
             
             //            print("Received Data: \(String(data: data, encoding: .utf8) ?? "Invalid Data")")
@@ -163,18 +256,26 @@ class WeatherViewModel: ObservableObject {
                 if let weather = weatherResponse.data.first {
                     DispatchQueue.main.async {
                         
+                        
                         self.cityName = weather.city_name
-                        self.cityNameFull = (weather.city_name + ", " + weather.state_code + ", " + weather.country_code)
-                        self.temperature = weather.temp
-                        self.windSpeed = weather.wind_spd
-                        self.humidity = Int(weather.rh)
-                        self.visibility = weather.vis
+                        if weather.state_code.isNumber {
+                            self.cityNameFull = (weather.city_name + ", " + weather.country_code)
+                        }else{
+                            self.cityNameFull = (weather.city_name + ", " + weather.state_code + ", " + weather.country_code)
+                        }
+                        
+                        self.temperature = Int(round(weather.temp))
+                        self.windSpeed = self.convertMpsToMph(weather.wind_spd)
+                        self.humidity = weather.rh
+                        self.visibility = self.convertKmToMi(weather.vis)
                         self.weatherDescription = weather.weather.description
                         self.background = self.mapConditionToBackground(weather.weather.icon)
-                        self.sunset = weather.sunset
-                        self.sunrise = weather.sunrise
-                        self.precipitation = weather.precip
-                        self.datetime = self.formatUnixTimestamp(weather.ts)
+                        self.backgroundicon = self.mapConditionToBackgroundIcon(weather.weather.icon)
+                        self.highlowicon = self.getWeatherIcon(self.temperature)
+                        self.sunset = self.convertTimeToUserTimezone(utcTime: weather.sunset, timezoneIdentifier: weather.timezone)
+                        self.sunrise = self.convertTimeToUserTimezone(utcTime: weather.sunrise, timezoneIdentifier: weather.timezone)
+                        self.precipitation = self.convertMmToIn(weather.precip)
+                        self.datetime = self.formatUnixTimestamp(weather.ts, timeZone: weather.timezone)
                         
                         //                        self.animationName = self.mapConditionToIcon(weather.weather.icon)
                         self.iconURL = URL(string: "https://www.weatherbit.io/static/img/icons/\(weather.weather.icon).png")
@@ -205,9 +306,12 @@ class WeatherViewModel: ObservableObject {
                 }
                 return
             }
+            print("Forcast Data: \(String(data: data, encoding: .utf8) ?? "Invalid Data")")
             
             do {
                 let forecastResponse = try JSONDecoder().decode(WeatherForcastResponse.self, from: data)
+                print("Forcast Response Data: \(forecastResponse) ")
+                
                 DispatchQueue.main.async {
                     self.forecast = Array(forecastResponse.data.dropFirst()) // Exclude today
                 }
@@ -218,6 +322,18 @@ class WeatherViewModel: ObservableObject {
             }
         }.resume()
     }
+    
+    func formatDate(_ dateTime: String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd:HH"
+        if let date = formatter.date(from: dateTime) {
+            let outputFormatter = DateFormatter()
+            outputFormatter.dateFormat = "MMM d"
+            return outputFormatter.string(from: date)
+        }
+        return "NONE"
+    }
+
     
     // Dynamic mapping for weather backgrounds
     private func mapConditionToBackground2(_ condition: String) -> String {
@@ -235,7 +351,12 @@ class WeatherViewModel: ObservableObject {
         case "mist", "fog":
             return "Background-foggy"
         default:
-            return "Background-default"
+            if checkTime() == "night" {
+                return "Background-night"
+            } else {
+                return "Background-sunny-wind"
+            }
+            
         }
     }
     
@@ -259,9 +380,10 @@ class WeatherViewModel: ObservableObject {
         case "r03d","r03n": return "cloud.heavyrain"
         case "f01d","f01n","r04d","r04n","r05d","r05n","r06d","r06n": return "cloud.rain"
         case "s01d","s01n","s02d","s02n","s03d","s03n","s04d","s04n": return "cloud.snow"
-        case "s05d","s05n": return "cloud.sleet"
-        case "a01d","a01n","a02d","a02n","a03d","a03n","a04d","a04n","a05d","a05n","a06d","a06n": return "smoke"
-        case "c01d","c01n": return "sun.max"
+        case "s05d","s05n","s06d","s06n","a05d","a05n","a06d","a06n": return "cloud.sleet"
+        case "a01d","a01n","a02d","a02n","a03d","a03n","a04d","a04n": return "smoke"
+        case "c01d": return "sun.max"
+        case "c01n": return "moon.fill"
         case "c02d", "c02n","c03d","c03n": return "cloud.sun"
         case "c04d","c04n": return "smoke"
         default:
@@ -270,29 +392,56 @@ class WeatherViewModel: ObservableObject {
         
     }
     
-    private func mapConditionToBackground(_ icon: String) -> String {
-        //        TODO
+    
+    private func mapConditionToBackgroundIcon(_ icon: String) -> String {
         switch icon
         {
+        case "t01d","t02d","t03d","t01n","t02n","t03n" : return "Background-thunder"
+        case "t04d","t04n","t05d","t05n": return "Background-thunder"
+        case "d01d","d01n","d02d","d02n","d03d","d03n": return "Background-clouds"
+        case "r01d", "r01n","r02d","r02n": return "Background-clouds"
+        case "r03d","r03n": return "Background-clouds"
+        case "f01d","f01n","r04d","r04n","r05d","r05n","r06d","r06n": return "Background-clouds"
+        case "s01d","s01n","s02d","s02n","s03d","s03n","s04d","s04n": return "Background-snow"
+        case "s05d","s05n","s06d","s06n","a05d","a05n","a06d","a06n" : return "Background-snow"
+        case "a01d","a01n","a02d","a02n","a03d","a03n","a04d","a04n": return "Background-smoke"
+        case "c02d", "c02n","c03d","c03n": return "Background-clouds"
+        case "c04d","c04n": return "None"
+        default:
+            return "None"
+        }
+        
+    }
+    
+    private func mapConditionToBackground(_ icon: String) -> String {
+        switch icon
+        {
+            //            Normal
+        case "c01n" : return "Background-night"
+        case "c01d" : return "Background-sunny"
             
-        case "t01n","t02n","t03n", "r01n","r02n", "r03n"
-            ,"f01n","r04n","r05n","r06n": return "Animation-night-rain"
-        case "c01n" : return "Animation-night"
-            //            Night
-        case "s01n","s02n","s03n","s04n","s05n" : return "Animation-snow"
-            //            Day
-        case "s01d","s02d","s03d","s04d","s05d" : return "Animation-snow2"
-        case "c01d" : return "Animation-sunny"
-        case "t04d","t04n","t05d","t05n", "d01d","d01n","d02d","d02n","d03d","d03n", "f01d","r04d", "r05d","r06d" : return "Animation-thunderstrom"
+            //            Rain
+        case "r01n","r02n", "r03n","r04n","r05n","r06n","d01n","d03n","d02n","f01n": return "Background-rain"
+        case "r01d","r02d", "r03d","r04d", "r05d","r06d","d01d","d02d","d03d", "f01d" : return "Background-rain"
             
-            //        To be added
-        case "t01d","t02d","t03d","r01d","r02d", "r03d" : return "Animation-sunny-rain"
-        case "a01d","a01n","a02d","a02n","a03d","a03n","a04d","a04n","a05d","a05n","a06d","a06n": return "smoke"
-        case "c02d", "c02n","c03d","c03n": return "cloud.sun"
-        case "c04d","c04n": return "smoke"
+        case "c02d", "c02n","c03d","c03n": return "Background-light-cloud"
+        case "a01d","a01n","a02d","a02n","a03d","a03n","a04d","a04n", "c04d","c04n": return "Background-sunny-wind"
+            
+            //          Snow
+        case "s01n","s02n","s03n","s04n","s05n", "s06n","a05d","a06n" : return "Background-night-snow"
+        case "s01d","s02d","s03d","s04d","s05d", "s06d","a05n","a06d" : return "Background-snow"
+            
+            
+            //            Thunderstrom
+        case "t01n","t02n","t03n","t04n","t05n": return "Background-thunderstrom"
+        case "t01d","t02d","t03d","t04d","t05d"  : return "Background-thunderstrom"
+            
             
         default:
-            return "cloud"
+            if checkTime() == "night" {
+                return "Background-night"
+            }
+            return "Background-sunny-wind"
         }
         
     }
