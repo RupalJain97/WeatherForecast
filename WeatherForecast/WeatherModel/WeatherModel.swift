@@ -5,6 +5,8 @@
 //  Created by Rupal Jain on 11/25/24.
 //
 
+import Foundation
+
 struct WeatherResponse: Decodable {
     let data: [WeatherData]
 }
@@ -13,10 +15,20 @@ struct WeatherForcastResponse: Decodable {
     let data: [WeatherForecastData]
 }
 
-struct WeatherForecastData: Decodable {
+struct WeatherForecastData: Decodable , Identifiable{
+    var id = UUID()
     let temp: Double
     let datetime: String
     let weather: WeatherCondition
+    
+    var day: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd:HH" // Match the API format
+        guard let date = dateFormatter.date(from: datetime) else { return datetime }
+        
+        dateFormatter.dateFormat = "d" // Desired output format
+        return dateFormatter.string(from: date)
+    }
 }
 
 //                        let wind_cdir_full: String

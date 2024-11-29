@@ -306,9 +306,12 @@ class WeatherViewModel: ObservableObject {
                 }
                 return
             }
+            print("Forcast Data: \(String(data: data, encoding: .utf8) ?? "Invalid Data")")
             
             do {
                 let forecastResponse = try JSONDecoder().decode(WeatherForcastResponse.self, from: data)
+                print("Forcast Response Data: \(forecastResponse) ")
+                
                 DispatchQueue.main.async {
                     self.forecast = Array(forecastResponse.data.dropFirst()) // Exclude today
                 }
@@ -319,6 +322,18 @@ class WeatherViewModel: ObservableObject {
             }
         }.resume()
     }
+    
+    func formatDate(_ dateTime: String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd:HH"
+        if let date = formatter.date(from: dateTime) {
+            let outputFormatter = DateFormatter()
+            outputFormatter.dateFormat = "MMM d"
+            return outputFormatter.string(from: date)
+        }
+        return "NONE"
+    }
+
     
     // Dynamic mapping for weather backgrounds
     private func mapConditionToBackground2(_ condition: String) -> String {

@@ -39,6 +39,7 @@ struct WeatherView: View {
             
             VStack(spacing: 0) {
                 
+                //                Text search bar
                 ZStack{
                     VStack(spacing: 10){
                         // Top section with search bar
@@ -163,14 +164,14 @@ struct WeatherView: View {
                             WeatherDetailView(icon: "sunset.fill", title: "\(viewModel.sunset)")
                         }
                         .padding(.top, 20)
-//                        .padding(.bottom, .infinity)
+                        //                        .padding(.bottom, .infinity)
                     }
                     .scaledToFit()
                     
                 }
                 .frame(maxHeight: .infinity)
-//                .frame(width: UIScreen.main.bounds.width)
                 
+                //                Bottom Section
                 ZStack {
                     RoundedRectangle(cornerRadius: 30)
                         .fill(Color.white)
@@ -184,9 +185,12 @@ struct WeatherView: View {
                                 
                                 Spacer()
                                 HStack {
-                                    WeatherForecastView(day: "Apr 28", icon: "sun.max.fill", temp: "13.5°")
-                                    WeatherForecastView(day: "Apr 29", icon: "cloud.fill", temp: "13.4°")
-                                    WeatherForecastView(day: "Apr 30", icon: "cloud.sun.fill", temp: "13.5°")
+                                    ForEach(viewModel.forecast, id: \.datetime) { forecast in
+                                        WeatherForecastView(day: viewModel.formatDate(forecast.datetime), icon: URL(string: "https://www.weatherbit.io/static/img/icons/\(forecast.weather.icon).png"), temp: "\(forecast.temp)°")
+                                        }
+//                                    WeatherForecastView(day: viewModel.forecast, icon: "sun.max.fill", temp: "13.5°")
+//                                    WeatherForecastView(day: "Apr 29", icon: "cloud.fill", temp: "13.4°")
+//                                    WeatherForecastView(day: "Apr 30", icon: "cloud.sun.fill", temp: "13.5°")
                                 }
                                 .padding(.bottom, 40)
                             }
@@ -230,17 +234,27 @@ struct WeatherDetailView: View {
 
 struct WeatherForecastView: View {
     let day: String
-    let icon: String
+    let icon: URL?
     let temp: String
     
     var body: some View {
         VStack (spacing: 5) {
-            Image(systemName: icon)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 30, height: 30)
-                .padding(.bottom, 5)
-                .foregroundColor(.gray)
+            AsyncImage(url: icon) { image in
+                image.resizable().scaledToFit()
+            } placeholder: {
+                ProgressView()
+            }
+            .scaledToFit()
+            .frame(width: 30, height: 30)
+            .padding(.bottom, 5)
+            .foregroundColor(.gray)
+            
+            //            Image(systemName: icon)
+            //                .resizable()
+//                .scaledToFit()
+//                .frame(width: 30, height: 30)
+//                .padding(.bottom, 5)
+//                .foregroundColor(.gray)
             
             Text(day)
                 .font(.system(size: 15, weight: .semibold, design: .rounded))
