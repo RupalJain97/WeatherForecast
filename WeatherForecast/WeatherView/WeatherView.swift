@@ -12,33 +12,39 @@ struct WeatherView: View {
     var city: String = "Cupertino"
     
     var body: some View {
-        VStack (spacing: 0) {
-            //            LinearGradient(gradient: viewModel.weatherBackgroundGradient(),
-            //                           startPoint: .top, endPoint: .bottom)
-            //            .edgesIgnoringSafeArea(.all)
-            
-            ZStack{
+        ZStack{
+            if !viewModel.background.isEmpty {
                 Image(viewModel.background)
                     .resizable()
                     .scaledToFill()
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                     .clipped()
                     .edgesIgnoringSafeArea(.all)
-                    .opacity(0.5)
-                
+            } else {
+                LinearGradient(
+                    gradient: Gradient(colors: [.cyan, .orange]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+            }
+            
+            
+            if !viewModel.backgroundicon.isEmpty {
                 LottieView(name: viewModel.backgroundicon)
                     .ignoresSafeArea()
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height )
                     .frame(alignment: .bottom)
-                    .opacity(0.5)
+            }
+            
+            VStack(spacing: 0) {
                 
-                VStack(spacing: 16) {
-                    
-                    VStack{
+                ZStack{
+                    VStack(spacing: 10){
                         // Top section with search bar
                         HStack {
                             TextField("Enter city name", text: $viewModel.cityName)
-                                .foregroundColor(.white)
+                                .foregroundColor(.black)
                                 .padding(10)
                                 .font(.system(size: 18, weight: .semibold, design: .serif))
                                 .cornerRadius(10)
@@ -51,7 +57,7 @@ struct WeatherView: View {
                                 )
                                 .autocapitalization(.none)
                                 .disableAutocorrection(true)
-                                .background(Color.white.opacity(0.0))
+                                .background(Color.white.opacity(0.5))
                             
                             
                             Button(action: {
@@ -67,7 +73,7 @@ struct WeatherView: View {
                         }
                         .padding(.horizontal, 20)
                         
-                        VStack{
+                        VStack(alignment: .leading, spacing: 8){
                             HStack {
                                 Image(systemName: "mappin.and.ellipse")
                                     .foregroundColor(.white)
@@ -95,94 +101,106 @@ struct WeatherView: View {
                         }
                         .padding(.leading, 20)
                         .padding(.top, 0)
+                        
                     }
-                    .padding(.top, 28)
-                    
-                    
-                    // Main Weather Information
-                    VStack  {
-                        
-                        VStack{
-                            HStack{
-                                Image(systemName: viewModel.highlowicon)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 30, height: 30)
-//                                    .font(.system(size: 50))
-                                    .foregroundColor(.red)
-                                
-                                Text("\(String(format: "%.1f", viewModel.temperature))°")
-                                    .font(.system(size: 38, weight: .bold))
-                                    .foregroundColor(.white)
-                                    .scaleEffect(viewModel.isLoading ? 1.5 : 1.0)
-                                    .animation(.easeInOut, value: viewModel.isLoading)
-                                
-                                //                            Image(systemName: viewModel.weatherDescription == "Rain" ? "cloud.rain.fill" : "sun.max.fill")
-                                //                                .foregroundColor(viewModel.condition == "Rain" ? .gray : .yellow)
-                                //                                .font(.system(size: 20))
-                                
-                                AsyncImage(url: viewModel.iconURL) { image in
-                                    image.resizable().scaledToFit()
-                                } placeholder: {
-                                    ProgressView()
-                                }
-                                .frame(width: 50, height: 50)
-                                .font(.system(size: 20))
-                                
-                            }
-                            .padding(.top, 20)
-                            
-                            Text(viewModel.weatherDescription)
-                                .font(.headline)
-                                .foregroundColor(.white)
-                        }
-                        
-                        
-                        HStack (spacing: 20) {
-                            WeatherDetailView(icon: "sunrise", title: "\(viewModel.sunrise)")
-                            WeatherDetailView(icon: "sunset", title: "\(viewModel.sunset)")
-                            WeatherDetailView(icon: "wind", title: "\(viewModel.windSpeed)m/s")
-                        }
-                    }
-                    .padding(.top, 70)
+                    .padding(.top, 2)
                 }
-                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.8)
-                .padding(.top, 45)
+                .frame(height: 150, alignment: .top)
+                .padding(.top, 50)
+                
+                // Middle Section
+                ZStack {
+                    
+                    VStack (spacing: 16){
+                        HStack(spacing: 16){
+                            Image(systemName: viewModel.highlowicon)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 50, height: 50)
+                            //                                    .font(.system(size: 50))
+                                .foregroundColor(viewModel.thermometerColor(for: viewModel.temperature))
+                            
+                            Text("\(viewModel.temperature)°")
+                                .font(.system(size: 58, weight: .bold))
+                                .foregroundColor(.white)
+                                .scaleEffect(viewModel.isLoading ? 1.5 : 1.0)
+                                .animation(.easeInOut, value: viewModel.isLoading)
+                                .scaledToFit()
+                            
+                            
+                            //                            Image(systemName: viewModel.weatherDescription == "Rain" ? "cloud.rain.fill" : "sun.max.fill")
+                            //                                .foregroundColor(viewModel.condition == "Rain" ? .gray : .yellow)
+                            //                                .font(.system(size: 20))
+                            
+                            AsyncImage(url: viewModel.iconURL) { image in
+                                image.resizable().scaledToFit()
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            .frame(width: 80, height: 80)
+                            .font(.system(size: 70))
+                            
+                        }
+                        .padding(.top, 20)
+                        .scaledToFill()
+                        .frame(width: UIScreen.main.bounds.width)
+                        
+                        Text(viewModel.weatherDescription)
+                            .font(.system(size: 20))
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                        
+                        HStack (spacing: 25) {
+                            WeatherDetailView(icon: "wind", title: "\(viewModel.windSpeed)mph")
+                            WeatherDetailView(icon: "humidity.fill", title: "\(viewModel.humidity)%")
+                            WeatherDetailView(icon: "eye.fill", title: "\(viewModel.visibility) mi")
+                            WeatherDetailView(icon: "cloud.rain.fill", title: "\(viewModel.precipitation)''")
+                        }
+                        .padding(.top, 20)
+                        
+                        HStack (spacing: 25) {
+                            WeatherDetailView(icon: "sunrise.fill", title: "\(viewModel.sunrise)")
+                            WeatherDetailView(icon: "sunset.fill", title: "\(viewModel.sunset)")
+                        }
+                        .padding(.top, 20)
+//                        .padding(.bottom, .infinity)
+                    }
+                    .scaledToFit()
+                    
+                }
+                .frame(maxHeight: .infinity)
+//                .frame(width: UIScreen.main.bounds.width)
+                
+                ZStack {
+                    RoundedRectangle(cornerRadius: 30)
+                        .fill(Color.white)
+                        .shadow(color: .gray, radius: 2, x: 2, y: 2)
+                        .overlay(
+                            VStack {
+                                Text("Weather Forecast")
+                                    .font(.headline)
+                                    .foregroundColor(.black)
+                                    .padding(.top, 20)
+                                
+                                Spacer()
+                                HStack {
+                                    WeatherForecastView(day: "Apr 28", icon: "sun.max.fill", temp: "13.5°")
+                                    WeatherForecastView(day: "Apr 29", icon: "cloud.fill", temp: "13.4°")
+                                    WeatherForecastView(day: "Apr 30", icon: "cloud.sun.fill", temp: "13.5°")
+                                }
+                                .padding(.bottom, 40)
+                            }
+                        )
+                        .opacity(0.85)
+                        .padding(0)
+                }
+                .frame(height: 210, alignment: .bottom)
                 
             }
-            .scaledToFit()
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.7)
-            
-            
-            
-            ZStack (alignment: .bottom) {
-                RoundedRectangle(cornerRadius: 30)
-                    .fill(Color.white)
-                    .frame(height: 250)
-                    .shadow(color: .gray, radius: 2, x: 2, y: 2)
-                    .overlay(
-                        VStack {
-                            Text("Weather Forecast")
-                                .font(.headline)
-                                .foregroundColor(.black)
-                                .padding(.top, 20)
-                            
-                            Spacer()
-                            HStack(spacing: 25) {
-                                WeatherForecastView(day: "Apr 28", icon: "sun.max.fill", temp: "13.5°")
-                                WeatherForecastView(day: "Apr 29", icon: "cloud.fill", temp: "13.4°")
-                                WeatherForecastView(day: "Apr 30", icon: "cloud.sun.fill", temp: "13.5°")
-                            }
-                            .padding(.bottom, 40)
-                        }
-                    )
-            }
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.5)
+            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
             
         }
-        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-        .padding()
-        .background(Color.gray)
+        .scaledToFit()
         .onAppear {
             viewModel.fetchWeather(for: city)
         }
@@ -195,14 +213,15 @@ struct WeatherDetailView: View {
     let title: String
     
     var body: some View {
-        VStack (spacing: 10) {
+        VStack (spacing: 5) {
             Image(systemName: icon)
-                .font(.title2)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 30, height: 30)
                 .foregroundColor(.white)
             
             Text(title)
-                .font(.subheadline)
-                .font(.system(size: 60, weight: .semibold, design: .rounded))
+                .font(.system(size: 15, weight: .semibold, design: .rounded))
                 .foregroundColor(.white)
                 .multilineTextAlignment(.center)
         }
@@ -215,22 +234,22 @@ struct WeatherForecastView: View {
     let temp: String
     
     var body: some View {
-        VStack (spacing: 2) {
+        VStack (spacing: 5) {
             Image(systemName: icon)
-                .font(.title)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 30, height: 30)
                 .padding(.bottom, 5)
                 .foregroundColor(.gray)
             
             Text(day)
-            //                .titleStyle()
-                .font(.subheadline)
+                .font(.system(size: 15, weight: .semibold, design: .rounded))
                 .foregroundColor(.black)
                 .scaledToFit()
                 .padding(.bottom, 5)
             
             Text(temp)
-            //                .subtitleStyle()
-                .font(.subheadline)
+                .font(.system(size: 15, weight: .semibold, design: .rounded))
                 .foregroundColor(.black)
         }
     }

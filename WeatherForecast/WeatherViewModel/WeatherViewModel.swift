@@ -10,25 +10,33 @@ import SwiftUI
 
 // ViewModel to handle API calls and data
 class WeatherViewModel: ObservableObject {
-    @Published var cityName: String = "San Jose"
-    @Published var cityNameFull: String = "San Jose, CA, US"
-    @Published var temperature: Double = 0.0
+    @Published var cityName: String = "Cupertino"
+    @Published var cityNameFull: String = "Cupertino, CA, US"
+    @Published var temperature: Int = 0
     @Published var weatherDescription: String = ""
     @Published var sunrise: String = ""
     @Published var sunset: String = ""
     @Published var errorMessage: String? = nil
     @Published var isLoading: Bool = false
     @Published var background: String = "Background-sunny"
-    @Published var backgroundicon: String = "Background-sunny"
-    @Published var datetime: String = "default"
+    @Published var backgroundicon: String = "Background-clouds"
+    @Published var datetime: String = ""
     @Published var humidity: Int = 0
-    @Published var windSpeed: Double = 0.0
-    @Published var visibility: Double = 0.0
-    @Published var precipitation: Double = 0.0
+    @Published var windSpeed: Int = 0
+    @Published var visibility: Int = 0
+    @Published var precipitation: Int = 0
     //                        @Published var animationName: String = "default"
     @Published var iconURL: URL? = nil
     @Published var forecast: [WeatherForecastData] = []
-    @Published var highlowicon: String = "None"
+    @Published var highlowicon: String = "sun.max.fill"
+    
+    init() {
+        updateIcon()
+    }
+    
+    func updateIcon() {
+        highlowicon = checkTime() == "night" ? "moon.stars.fill" : "sun.max.fill"
+    }
     
     // Lottie Animation Mapping
     private let lottieAnimations: [String: String] = [
@@ -44,22 +52,52 @@ class WeatherViewModel: ObservableObject {
         "partly-cloudy-night": "partly_cloudy_night"
     ]
     
-    func updateBackgroundBasedOnTime() {
+    func checkTime() -> String {
         let currentHour = Calendar.current.component(.hour, from: Date())
         
         // Set background animation based on the time of day
         if currentHour >= 19 || currentHour < 5 { // Between 7 PM and 5 AM
+            return "night"
+        } else {
+            return "day"
+        }
+    }
+    
+    func updateBackgroundBasedOnTime() {
+        if checkTime() == "night" {
             self.background = "Background-night"
         } else {
             self.background = "Background-sunny-wind"
         }
     }
     
-    func formatUnixTimestamp(_ timestamp: Int64) -> String {
+    func formatUnixTimestamp(_ timestamp: Int64, timeZone: String) -> String {
         let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
         let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(identifier: timeZone)
         dateFormatter.dateFormat = "E, MMM d, h:mm a"
         return dateFormatter.string(from: date)
+    }
+    
+    func convertTimeToUserTimezone(utcTime: String, timezoneIdentifier: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC") // Input is UTC
+        
+        guard let date = dateFormatter.date(from: utcTime) else {
+            print("Invalid time format")
+            return "Default"
+        }
+        
+        // Convert to user's timezone
+        if let userTimezone = TimeZone(identifier: timezoneIdentifier) {
+            dateFormatter.timeZone = userTimezone
+            dateFormatter.dateFormat = "h:mm a" // Desired output format
+            return dateFormatter.string(from: date)
+        } else {
+            print("Invalid timezone identifier")
+            return "Default"
+        }
     }
     
     func getAPIKey() -> String {
@@ -71,25 +109,57 @@ class WeatherViewModel: ObservableObject {
         return apiKey
     }
     
-    func getWeatherIcon(for temperature: Double) -> String {
+    func getWeatherIcon(_ temperature: Int) -> String {
         switch temperature {
         case ..<0: // Below 0°C (Freezing weather)
             return "snowflake.circle.fill"
         case 0..<5: // 0°C to 5°C (Very cold weather)
             return "thermometer.snowflake"
         case 5..<15: // 5°C to 15°C (Cool weather)
-            return "cloud.fill"
+            return "thermometer.low"
         case 15..<25: // 15°C to 25°C (Mild/comfortable weather)
-            return "sun.max.fill"
+            return "thermometer.medium"
         case 25..<30: // 25°C to 30°C (Warm weather)
             return "thermometer.sun.fill"
-        case 30..<35: // 30°C to 35°C (Hot weather)
+        case 30...: // 30°C onwards (Hot weather)
             return "thermometer.high"
         default: // Above 35°C (Very hot weather)
-            return "sun.max.trianglebadge.exclamationmark.fill" 
+            if checkTime() == "night" { // Between 7 PM and 5 AM
+                return "moon.stars.fill"
+            }
+            return "sun.max.fill"
         }
     }
     
+    func thermometerColor(for temperature: Int) -> Color {
+        switch temperature {
+        case ..<0:
+            return .blue
+        case 0..<15:
+            return .blue
+        case 15..<30:
+            return .green
+        case 30...:
+            return .red
+        default:
+            return .gray
+        }
+    }
+    
+    func convertKmToMi(_ kilometers: Int) -> Int {
+        let miles = Double(kilometers) * 0.621371
+        return Int(round(miles))
+    }
+    
+    func convertMmToIn(_ millimeters: Int) -> Int {
+        let inches = Double(millimeters) * 0.0393701
+        return Int(round(inches))
+    }
+    
+    func convertMpsToMph(_ metersPerSecond: Double) -> Int {
+        let mph = metersPerSecond * 2.23694
+        return Int(round(mph * 10))
+    }
     
     // Determine background color based on weather condition
     //    func backgroundColor() -> Color {
@@ -172,7 +242,7 @@ class WeatherViewModel: ObservableObject {
             }
             
             DispatchQueue.main.async {
-                self.background = "clear_day" // Default animation if no data
+                self.background = self.checkTime() == "night" ? "Background-night" : "Background-sunny-wind" // Default animation if no data
                 self.backgroundicon = ""
             }
             
@@ -186,19 +256,26 @@ class WeatherViewModel: ObservableObject {
                 if let weather = weatherResponse.data.first {
                     DispatchQueue.main.async {
                         
+                        
                         self.cityName = weather.city_name
-                        self.cityNameFull = (weather.city_name + ", " + weather.state_code + ", " + weather.country_code)
-                        self.temperature = weather.temp
-                        self.windSpeed = weather.wind_spd
-                        self.humidity = Int(weather.rh)
-                        self.visibility = weather.vis
+                        if weather.state_code.isNumber {
+                            self.cityNameFull = (weather.city_name + ", " + weather.country_code)
+                        }else{
+                            self.cityNameFull = (weather.city_name + ", " + weather.state_code + ", " + weather.country_code)
+                        }
+                        
+                        self.temperature = Int(round(weather.temp))
+                        self.windSpeed = self.convertMpsToMph(weather.wind_spd)
+                        self.humidity = weather.rh
+                        self.visibility = self.convertKmToMi(weather.vis)
                         self.weatherDescription = weather.weather.description
                         self.background = self.mapConditionToBackground(weather.weather.icon)
                         self.backgroundicon = self.mapConditionToBackgroundIcon(weather.weather.icon)
-                        self.sunset = weather.sunset
-                        self.sunrise = weather.sunrise
-                        self.precipitation = weather.precip
-                        self.datetime = self.formatUnixTimestamp(weather.ts)
+                        self.highlowicon = self.getWeatherIcon(self.temperature)
+                        self.sunset = self.convertTimeToUserTimezone(utcTime: weather.sunset, timezoneIdentifier: weather.timezone)
+                        self.sunrise = self.convertTimeToUserTimezone(utcTime: weather.sunrise, timezoneIdentifier: weather.timezone)
+                        self.precipitation = self.convertMmToIn(weather.precip)
+                        self.datetime = self.formatUnixTimestamp(weather.ts, timeZone: weather.timezone)
                         
                         //                        self.animationName = self.mapConditionToIcon(weather.weather.icon)
                         self.iconURL = URL(string: "https://www.weatherbit.io/static/img/icons/\(weather.weather.icon).png")
@@ -259,8 +336,7 @@ class WeatherViewModel: ObservableObject {
         case "mist", "fog":
             return "Background-foggy"
         default:
-            let currentHour = Calendar.current.component(.hour, from: Date())
-            if currentHour >= 19 || currentHour < 5 {
+            if checkTime() == "night" {
                 return "Background-night"
             } else {
                 return "Background-sunny-wind"
@@ -347,12 +423,10 @@ class WeatherViewModel: ObservableObject {
             
             
         default:
-            let currentHour = Calendar.current.component(.hour, from: Date())
-            if currentHour >= 19 || currentHour < 5 {
+            if checkTime() == "night" {
                 return "Background-night"
-            } else {
-                return "Background-sunny-wind"
             }
+            return "Background-sunny-wind"
         }
         
     }

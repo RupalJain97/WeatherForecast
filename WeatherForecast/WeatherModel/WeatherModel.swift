@@ -27,15 +27,16 @@ struct WeatherData: Decodable {
     let city_name: String
     let temp: Double
     let weather: WeatherCondition
-    let rh: Double
+    let rh: Int
     let wind_spd: Double
-    let vis: Double
+    let vis: Int
     let sunrise: String
     let sunset: String
     let country_code : String
     let state_code : String
-    let precip: Double
+    let precip: Int
     let ts: Int64
+    let timezone: String
 }
 
 struct WeatherCondition: Decodable {
