@@ -1,15 +1,5 @@
 # Weather Forecast App 🌤️
 
-
-<!-- Create a Config.plist File:
-Right-click your project in Xcode and select New File > Property List.
-Name the file Config.plist.
-Add a key-value pair, e.g.:
-<key>APIKey</key>
-<string>key</string> -->
-
-
-
 A beautifully designed weather app built using **SwiftUI** that provides real-time weather updates, forecasts, and detailed weather metrics.
 
 ---
@@ -25,6 +15,20 @@ A beautifully designed weather app built using **SwiftUI** that provides real-ti
   - Converts universal time to the user's local timezone.
   - Supports unit conversion for wind speed, precipitation, and distance.
 - **Responsive Design**: Fully optimized for all screen sizes.
+
+---
+
+## Technology and Structures
+
+This Weather App was developed to explore and implement various iOS technologies and patterns, including:
+
+- **Swift MVVM (Model-View-ViewModel):** Followed the MVVM architecture to separate the UI layer (View) from business logic (ViewModel), promoting cleaner and more testable code.
+- **URLSession**: Used for handling network data transfer tasks to fetch real-time weather data and 3-day forecasts.
+- **RESTful API**: Integrated the Weatherbit API to fetch detailed weather information for over 376,000 cities.
+<!-- - **Core Animation**: Implemented smooth and interactive animations for enhanced user experience. -->
+<!-- - **Auto Layout**: Utilized SwiftUI's layout tools for responsive and adaptive design. -->
+- **Lottie**: Incorporated engaging animations using the Lottie framework to enhance visual appeal.
+- **Web Services**: Handled data flow between the app and the Weatherbit API.
 
 ---
 
@@ -57,7 +61,7 @@ A beautifully designed weather app built using **SwiftUI** that provides real-ti
 ### API Integration
 - The app fetches weather data from [Weatherbit.io](https://www.weatherbit.io/) using the following endpoints:
   - **Current Weather API**: Fetches the current weather data.
-  - **7-Day Forecast API**: Fetches the weather forecast for the next week.
+  - **3-Day Forecast API**: Fetches the weather forecast for the next week.
 
 ### Data Parsing
 - Weather data is fetched in JSON format and decoded using `Codable` structs.
