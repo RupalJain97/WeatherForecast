@@ -41,6 +41,7 @@ struct WeatherView: View {
                 
             }
             
+            
             VStack(spacing: 0) {
                 
                 //                Text search bar
@@ -145,6 +146,7 @@ struct WeatherView: View {
                             .frame(width: 80, height: 80)
                             .font(.system(size: 70))
                             
+                            
                         }
                         .padding(.top, 20)
                         .scaledToFill()
@@ -187,11 +189,19 @@ struct WeatherView: View {
                                     .foregroundColor(.black)
                                     .padding(.top, 20)
                                 
-                                Spacer()
                                 HStack {
-                                    ForEach(viewModel.forecast, id: \.datetime) { forecast in
-                                        WeatherForecastView(day: viewModel.formatDate(forecast.datetime), icon: URL(string: "https://www.weatherbit.io/static/img/icons/\(forecast.weather.icon).png"), temp: "\(forecast.temp)°")
-                                        }
+                                    
+                                    ForEach(viewModel.forecast) { forecastWrapper in
+                                        let nextforecast = forecastWrapper.forecast
+                                        
+                                        WeatherForecastView(
+                                            day: viewModel.formatDateForecastWeather(nextforecast.datetime),
+                                            icon: URL(string: "https://www.weatherbit.io/static/img/icons/\(nextforecast.weather.icon).png"),
+                                            temp: "\(nextforecast.temp)°"
+                                        )
+                                        
+                                    }
+                                    
                                 }
                                 .padding(.bottom, 40)
                             }
@@ -206,7 +216,7 @@ struct WeatherView: View {
             
         }
         .scaledToFit()
-        .preferredColorScheme(viewModel.isDarkMode ? .dark : .light)
+        .preferredColorScheme(viewModel.isDarkMode ? .light : .dark)
         .onAppear {
             viewModel.fetchWeather(for: city)
             viewModel.updateColorScheme()
@@ -256,10 +266,10 @@ struct WeatherForecastView: View {
             
             //            Image(systemName: icon)
             //                .resizable()
-//                .scaledToFit()
-//                .frame(width: 30, height: 30)
-//                .padding(.bottom, 5)
-//                .foregroundColor(.gray)
+            //                .scaledToFit()
+            //                .frame(width: 30, height: 30)
+            //                .padding(.bottom, 5)
+            //                .foregroundColor(.gray)
             
             Text(day)
                 .font(.system(size: 15, weight: .semibold, design: .rounded))

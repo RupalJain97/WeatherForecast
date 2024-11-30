@@ -27,7 +27,7 @@ class WeatherViewModel: ObservableObject {
     @Published var precipitation: Int = 0
     //                        @Published var animationName: String = "default"
     @Published var iconURL: URL? = nil
-    @Published var forecast: [WeatherForecastData] = []
+    @Published var forecast: [IdentifiableWeatherForecastData] = []
     @Published var highlowicon: String = "sun.max.fill"
     
     @Published var isDarkMode: Bool = false
@@ -100,6 +100,20 @@ class WeatherViewModel: ObservableObject {
             print("Invalid timezone identifier")
             return "Default"
         }
+    }
+    
+    func formatDateForecastWeather(_ datetime: String) -> String {
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd" // Match the API format
+        
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "MMM d" // Desired output format, e.g., "Apr 29"
+        
+        guard let date = inputFormatter.date(from: datetime) else {
+            return "Default" // Fallback to the raw datetime if parsing fails
+        }
+        
+        return outputFormatter.string(from: date)
     }
     
     func getAPIKey() -> String {
@@ -202,7 +216,7 @@ class WeatherViewModel: ObservableObject {
             return
         }
         
-        print("fetchWeather called for city: \(city)")
+        //        print("fetchWeather called for city: \(city)")
         
         errorMessage = nil
         isLoading = true // Start loading
@@ -217,7 +231,7 @@ class WeatherViewModel: ObservableObject {
         let forecastUrl = "https://api.weatherbit.io/v2.0/forecast/daily?city=\(cityEncoded)&days=4&key=\(apiKey)"
         
         
-        print("URL String: \(weatherUrl)")
+        //        print("URL String: \(weatherUrl)")
         
         guard let url = URL(string: weatherUrl) else {
             DispatchQueue.main.async {
@@ -266,11 +280,9 @@ class WeatherViewModel: ObservableObject {
                 // Decode JSON response
                 let weatherResponse = try JSONDecoder().decode(WeatherResponse.self, from: data)
                 
-                print("Weather Response: \(weatherResponse)")
+                //                print("Weather Response: \(weatherResponse)")
                 if let weather = weatherResponse.data.first {
                     DispatchQueue.main.async {
-                        
-                        
                         self.cityName = weather.city_name
                         if weather.state_code.isNumber {
                             self.cityNameFull = (weather.city_name + ", " + weather.country_code)
@@ -294,6 +306,24 @@ class WeatherViewModel: ObservableObject {
                         //                        self.animationName = self.mapConditionToIcon(weather.weather.icon)
                         self.iconURL = URL(string: "https://www.weatherbit.io/static/img/icons/\(weather.weather.icon).png")
                         
+                        //                        print("""
+                        //                            Debugging WeatherViewModel:
+                        //                            - cityName: \(self.cityName)
+                        //                            - cityNameFull: \(self.cityNameFull)
+                        //                            - temperature: \(self.temperature)
+                        //                            - windSpeed: \(self.windSpeed)
+                        //                            - humidity: \(self.humidity)
+                        //                            - visibility: \(self.visibility)
+                        //                            - weatherDescription: \(self.weatherDescription)
+                        //                            - background: \(self.background)
+                        //                            - backgroundicon: \(self.backgroundicon)
+                        //                            - highlowicon: \(self.highlowicon)
+                        //                            - sunset: \(self.sunset)
+                        //                            - sunrise: \(self.sunrise)
+                        //                            - precipitation: \(self.precipitation)
+                        //                            - datetime: \(self.datetime)
+                        //                            - iconURL: \(self.iconURL?.absoluteString ?? "nil")
+                        //                            """)
                     }
                 }
             } catch {
@@ -320,34 +350,31 @@ class WeatherViewModel: ObservableObject {
                 }
                 return
             }
-            print("Forcast Data: \(String(data: data, encoding: .utf8) ?? "Invalid Data")")
+            //            print("Forcast Data: \(String(data: data, encoding: .utf8) ?? "Invalid Data")")
             
             do {
                 let forecastResponse = try JSONDecoder().decode(WeatherForcastResponse.self, from: data)
-                print("Forcast Response Data: \(forecastResponse) ")
+                //                print("Forcast Response Data: \(forecastResponse) ")
                 
                 DispatchQueue.main.async {
-                    self.forecast = Array(forecastResponse.data.dropFirst()) // Exclude today
+                    // Map each forecast item to include a dynamically generated `id`
+                    self.forecast = forecastResponse.data
+                        .dropFirst()
+                        .map{ forecastData in
+                            IdentifiableWeatherForecastData(id: UUID(), forecast: forecastData)
+                        }
+                    
+                    //                    print("Final Forecast data: \(self.forecast)" )
                 }
+                
             } catch {
+                print("Error parsing forecast data \(error.localizedDescription)")
                 DispatchQueue.main.async {
                     self.errorMessage = "Error parsing forecast: \(error.localizedDescription)"
                 }
             }
         }.resume()
     }
-    
-    func formatDate(_ dateTime: String) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd:HH"
-        if let date = formatter.date(from: dateTime) {
-            let outputFormatter = DateFormatter()
-            outputFormatter.dateFormat = "MMM d"
-            return outputFormatter.string(from: date)
-        }
-        return "NONE"
-    }
-
     
     // Dynamic mapping for weather backgrounds
     private func mapConditionToBackground2(_ condition: String) -> String {
@@ -417,8 +444,8 @@ class WeatherViewModel: ObservableObject {
         case "r03d","r03n": return "Background-clouds"
         case "f01d","f01n","r04d","r04n","r05d","r05n","r06d","r06n": return "Background-rain"
         case "s01d","s01n","s02d","s02n","s03d","s03n","s04d","s04n": return "Background-snow"
-        case "s05d","s05n","s06d","s06n","a05d","a05n","a06d","a06n" : return "Background-snow"
-        case "a01d","a01n","a02d","a02n","a03d","a03n","a04d","a04n": return "None"
+        case "s05d","s05n","s06d","s06n","a05d" : return "Background-snow"
+        case "a01d","a01n","a02d","a02n","a03d","a03n","a04d","a04n","a05n","a06d","a06n": return "None"
         case "c02d", "c02n","c03d","c03n": return "Background-clouds"
         case "c04d","c04n": return "None"
         default:
@@ -438,7 +465,8 @@ class WeatherViewModel: ObservableObject {
         case "r01n","r02n", "r03n","r04n","r05n","r06n","d01n","d03n","d02n","f01n": return "Background-raining"
         case "r01d","r02d", "r03d","r04d", "r05d","r06d","d01d","d02d","d03d", "f01d" : return "Background-raining"
             
-        case "c02d", "c02n","c03d","c03n": return "Background-light-cloud"
+        case "c02d", "c03d": return "Background-light-cloud"
+        case "c02n","c03n": return "Background-night-cloudy"
         case "a01d","a01n","a02d","a02n","a03d","a03n","a04d","a04n", "c04d","c04n": return "Background-sunny-wind"
             
             //          Snow
