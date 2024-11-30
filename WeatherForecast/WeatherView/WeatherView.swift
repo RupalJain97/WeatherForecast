@@ -30,7 +30,7 @@ struct WeatherView: View {
             }
             
             
-            if !viewModel.backgroundicon.isEmpty {
+            if viewModel.backgroundicon != "None" {
                 VStack{
                     LottieView(name: viewModel.backgroundicon)
                         .ignoresSafeArea()
@@ -76,9 +76,26 @@ struct WeatherView: View {
                                     .frame(width: 40, height: 40)
                                     .padding(.trailing, 20)
                             }
+                            
+                            //                        if let errorMessage = viewModel.errorMessage {
+                            //                            Text(errorMessage)
+                            //                                .foregroundColor(.red)
+                            //                                .padding()
+                            //                        }
+
                         }
                         .padding(.horizontal, 20)
-                        
+//                        .alert(isPresented: Binding<Bool>(
+//                                    get: { viewModel.errorMessage != nil },
+//                                    set: { _ in viewModel.errorMessage = nil }
+//                                )) {
+//                                    Alert(
+//                                        title: Text("Error"),
+//                                        message: Text(viewModel.errorMessage ?? "An unknown error occurred."),
+//                                        dismissButton: .default(Text("OK"))
+//                                    )
+//                                }
+                                            
                         VStack(alignment: .leading, spacing: 8){
                             HStack {
                                 Image(systemName: "mappin.and.ellipse")
@@ -189,7 +206,7 @@ struct WeatherView: View {
                                     .foregroundColor(.black)
                                     .padding(.top, 20)
                                 
-                                HStack {
+                                HStack (spacing: 10) {
                                     
                                     ForEach(viewModel.forecast) { forecastWrapper in
                                         let nextforecast = forecastWrapper.forecast
@@ -220,6 +237,7 @@ struct WeatherView: View {
         .onAppear {
             viewModel.fetchWeather(for: city)
             viewModel.updateColorScheme()
+            print("Theme: \(viewModel.isDarkMode)")
         }
         
     }

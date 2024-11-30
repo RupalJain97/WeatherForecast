@@ -19,7 +19,7 @@ class WeatherViewModel: ObservableObject {
     @Published var errorMessage: String? = nil
     @Published var isLoading: Bool = false
     @Published var background: String = "Background-sunny"
-    @Published var backgroundicon: String = "Background-clouds"
+    @Published var backgroundicon: String = "None"
     @Published var datetime: String = ""
     @Published var humidity: Int = 0
     @Published var windSpeed: Int = 0
@@ -32,6 +32,8 @@ class WeatherViewModel: ObservableObject {
     
     @Published var isDarkMode: Bool = false
     
+    private var currentCityTimezone: String = "America/Los_Angeles" // Default timezone
+        
     init() {
         updateIcon()
     }
@@ -55,14 +57,21 @@ class WeatherViewModel: ObservableObject {
     ]
     
     func checkTime() -> String {
-        let currentHour = Calendar.current.component(.hour, from: Date())
+        guard let timezone = TimeZone(identifier: currentCityTimezone) else {
+            return "day" // Default to day if the timezone is invalid
+        }
         
-        // Set background animation based on the time of day
-        if currentHour >= 19 || currentHour < 5 { // Between 7 PM and 5 AM
+        var calendar = Calendar.current
+        calendar.timeZone = timezone
+        
+        let currentHour = calendar.component(.hour, from: Date())
+        
+        if currentHour >= 20 || currentHour < 5 { // Between 8 PM and 5 AM
             return "night"
         } else {
             return "day"
         }
+
     }
     
     func updateBackgroundBasedOnTime() {
@@ -254,12 +263,20 @@ class WeatherViewModel: ObservableObject {
                 return
             }
             
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-                print("Error during HTTP Response: \(httpResponse.statusCode)")
-                DispatchQueue.main.async {
-                    self.errorMessage = "Server returned an error: \(httpResponse.statusCode)"
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode == 404 {
+                    DispatchQueue.main.async {
+                        self.errorMessage = "City not found. Please check the city name and try again."
+                    }
+                    return
+                } else if httpResponse.statusCode != 200 {
+                    print("Error during HTTP Response: \(httpResponse.statusCode)")
+                    DispatchQueue.main.async {
+                        self.errorMessage = "Server returned an error: \(httpResponse.statusCode)"
+                    }
+                    return
                 }
-                return
+                
             }
             
             guard let data = data else {
@@ -271,7 +288,7 @@ class WeatherViewModel: ObservableObject {
             
             DispatchQueue.main.async {
                 self.background = self.checkTime() == "night" ? "Background-night" : "Background-sunny-wind" // Default animation if no data
-                self.backgroundicon = ""
+                self.backgroundicon = "None"
             }
             
             //            print("Received Data: \(String(data: data, encoding: .utf8) ?? "Invalid Data")")
@@ -306,24 +323,41 @@ class WeatherViewModel: ObservableObject {
                         //                        self.animationName = self.mapConditionToIcon(weather.weather.icon)
                         self.iconURL = URL(string: "https://www.weatherbit.io/static/img/icons/\(weather.weather.icon).png")
                         
-                        //                        print("""
-                        //                            Debugging WeatherViewModel:
-                        //                            - cityName: \(self.cityName)
-                        //                            - cityNameFull: \(self.cityNameFull)
-                        //                            - temperature: \(self.temperature)
-                        //                            - windSpeed: \(self.windSpeed)
-                        //                            - humidity: \(self.humidity)
-                        //                            - visibility: \(self.visibility)
-                        //                            - weatherDescription: \(self.weatherDescription)
-                        //                            - background: \(self.background)
-                        //                            - backgroundicon: \(self.backgroundicon)
-                        //                            - highlowicon: \(self.highlowicon)
-                        //                            - sunset: \(self.sunset)
-                        //                            - sunrise: \(self.sunrise)
-                        //                            - precipitation: \(self.precipitation)
-                        //                            - datetime: \(self.datetime)
-                        //                            - iconURL: \(self.iconURL?.absoluteString ?? "nil")
-                        //                            """)
+                        // Update global timezone
+                        self.currentCityTimezone = weather.timezone
+                        
+                        // Update background and theme
+                        self.updateBackgroundBasedOnTime()
+                        self.updateColorScheme()
+                        
+                        print("""
+                            Debugging WeatherViewModel:
+                            Theme: \(self.isDarkMode)
+                            - cityNameFull: \(self.cityNameFull)
+                            - temperature: \(self.temperature)
+                            - weatherDescription: \(self.weatherDescription)
+                            - background: \(self.background)
+                            - backgroundicon: \(self.backgroundicon)
+                            """)
+                        
+//                        print("""
+//                                                    Debugging WeatherViewModel:
+//                                                    - cityName: \(self.cityName)
+//                                                    - cityNameFull: \(self.cityNameFull)
+//                                                    - temperature: \(self.temperature)
+//                                                    - windSpeed: \(self.windSpeed)
+//                                                    - humidity: \(self.humidity)
+//                                                    - visibility: \(self.visibility)
+//                                                    - weatherDescription: \(self.weatherDescription)
+//                                                    - background: \(self.background)
+//                                                    - backgroundicon: \(self.backgroundicon)
+//                                                    - highlowicon: \(self.highlowicon)
+//                                                    - sunset: \(self.sunset)
+//                                                    - sunrise: \(self.sunrise)
+//                                                    - precipitation: \(self.precipitation)
+//                                                    - datetime: \(self.datetime)
+//                                                    - iconURL: \(self.iconURL?.absoluteString ?? "nil")
+//                                                    """)
                     }
                 }
             } catch {
