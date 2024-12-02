@@ -1,3 +1,5 @@
+
+https://github.com/user-attachments/assets/06e4fbb3-cfda-468e-9b60-114dbfe005f5
 # Weather Forecast App 🌤️
 
 A beautifully designed weather app built using **SwiftUI** that provides real-time weather updates, forecasts, and detailed weather metrics.
@@ -5,7 +7,8 @@ A beautifully designed weather app built using **SwiftUI** that provides real-ti
 
 [Full Video here:](https://rupaljain97.github.io/assets/documents/projects/software_dev/Weather%20Forecast.mp4)
 
-https://github.com/user-attachments/assets/fae37f7d-8f6f-4520-bb00-2895d2008b6a
+https://github.com/user-attachments/assets/4e62edfd-ca24-4638-a2c7-495bbd6c86c8
+
 
 
 
