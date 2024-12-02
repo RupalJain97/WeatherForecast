@@ -30,7 +30,7 @@ https://github.com/user-attachments/assets/4958f483-9bd7-4ff4-bb0b-dd183e2e2452
 
 ---
 
-## Technology and Structures
+## Technology and Structures Features  💻
 
 This Weather App was developed to explore and implement various iOS technologies and patterns:
 
