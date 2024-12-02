@@ -1,6 +1,7 @@
 # Weather Forecast App 🌤️
 
-A beautifully designed weather app built using **SwiftUI** that provides real-time weather updates, forecasts, and detailed weather metrics.
+A beautifully designed weather app built using **SwiftUI** that provides real-time weather updates, accurate 3-day forecasts, and dynamic animations tailored for over 376,000 cities worldwide.
+
 
 
 [Full Video here:](https://rupaljain97.github.io/assets/documents/projects/software_dev/Weather%20Forecast.mp4)
@@ -12,29 +13,47 @@ https://github.com/user-attachments/assets/4958f483-9bd7-4ff4-bb0b-dd183e2e2452
 
 ## Features 🚀
 
-- **Real-Time Weather**: Fetches current weather conditions, including temperature, wind speed, and humidity.
+- **Real-Time Weather Updates**: Displays current weather metrics including temperature, humidity, wind speed, and visibility.
 - **3-Day Weather Forecast**: Displays a detailed forecast for the next 3 days.
 - **Dynamic UI**: 
-  - Adjusts the app's color scheme based on the weather conditions.
-  - Interactive and visually appealing animations powered by Lottie.
+  - State-dependent UI components for day/night cycles and weather conditions.
+  - Interactive and visually appealing animations powered by `Lottie-ios`.
 - **Localized Time & Units**: 
   - Converts universal time to the user's local timezone.
-  - Supports unit conversion for wind speed, precipitation, and distance.
+  <!-- - Supports unit conversion for wind speed, precipitation, and distance. -->
 - **Responsive Design**: Fully optimized for all screen sizes.
+- **Engaging Animations:** Adds life to the app with tailored animations matching weather conditions.
+
+<!-- - **Error Handling & Resilience:**
+  * Displays user-friendly messages for invalid city names or API issues.
+  * Handles network errors gracefully. -->
 
 ---
 
 ## Technology and Structures
 
-This Weather App was developed to explore and implement various iOS technologies and patterns, including:
+This Weather App was developed to explore and implement various iOS technologies and patterns:
 
-- **Swift MVVM (Model-View-ViewModel):** Followed the MVVM architecture to separate the UI layer (View) from business logic (ViewModel), promoting cleaner and more testable code.
-- **URLSession**: Used for handling network data transfer tasks to fetch real-time weather data and 3-day forecasts.
-- **RESTful API**: Integrated the Weatherbit API to fetch detailed weather information for over 376,000 cities.
-<!-- - **Core Animation**: Implemented smooth and interactive animations for enhanced user experience. -->
+- **Swift and SwiftUI:**
+  * Designed using **MVVM (Model-View-ViewModel)** to separate the UI layer (View) from business logic (ViewModel), promoting cleaner and more testable code.
+  * Leveraged `@Published` and `ObservableObject` for real-time UI updates.
+
+- **Network Integration:**
+  * Utilized **URLSession** for handling network data transfer tasks to fetch real-time weather data and 3-day forecasts.
+
+- **JSON Parsing with Codable:**
+  * Efficiently parsed complex **JSON** responses using Swift's **Codable** protocol.
+
+- **RESTful API**: 
+  * Integrated the Weatherbit API to fetch detailed weather information for over 376,000 cities.
+
 <!-- - **Auto Layout**: Utilized SwiftUI's layout tools for responsive and adaptive design. -->
-- **Lottie**: Incorporated engaging animations using the Lottie framework to enhance visual appeal.
-- **Web Services**: Handled data flow between the app and the Weatherbit API.
+- **Dynamic Animations with Lottie:**:    
+  * Incorporated engaging animations using the Lottie framework to enhance visual appeal.
+
+- **Data Localization:**
+  * Dynamic timezone adjustments using Foundation.Date and TimeZone APIs.
+
 
 ---
 
@@ -58,7 +77,7 @@ This Weather App was developed to explore and implement various iOS technologies
 
 ---
 
-## Installation 🛠️
+## Installation Guide 🛠️
 
 1. **Clone the repository**:
     ```bash
@@ -69,6 +88,13 @@ This Weather App was developed to explore and implement various iOS technologies
     Ensure you have the latest version of Xcode installed.
 3. **Open the project**:
     Open the `WeatherForecast.xcodeproj` file in Xcode.
+
+4. **Set Up API Key**:
+    Sign up on [Weatherbit.io](https://www.weatherbit.io/) to get your API key.
+   - Add your API key to `WeatherViewModel`:
+     ```swift
+     let apiKey = "your-weatherbit-api-key"
+     ```
 4. **Build and run**:
     Select a simulator or your connected device and click `Run` (⌘R).
 
@@ -81,40 +107,33 @@ This Weather App was developed to explore and implement various iOS technologies
   - **Current Weather API**: Fetches the current weather data.
   - **3-Day Forecast API**: Fetches the weather forecast for the next week.
 
-### Data Parsing
-- Weather data is fetched in JSON format and decoded using `Codable` structs.
+### Data Parsing and Processing
+- **Codable Protocol:** Weather data is fetched in JSON format and decoded using `Codable` structs.
 - All data is managed via a `WeatherViewModel` using the `@Published` property wrapper for real-time updates.
+- **State Management:** Used `ObservableObject` and `@Published` for seamless data-binding between backend and UI.
 
 ### Dynamic UI
 - Weather conditions dynamically influence:
-  - Background animations (using Lottie).
-  - Icons for weather conditions (fetched from Weatherbit's API).
-  - Temperature and weather descriptions.
+  - **Animations:** Integrated Lottie animations tied to weather conditions such as rain, sun, or snow.
+  - **Day/Night Mode:** UI dynamically adjusts based on the user's local time and weather conditions.
+ 
 
 ---
 
-## Configuration ⚡
+## To-Do List 📝
 
-1. **API Key**:
-   - Sign up on [Weatherbit.io](https://www.weatherbit.io/) to get your API key.
-   - Add your API key to `WeatherViewModel`:
-     ```swift
-     let apiKey = "your-weatherbit-api-key"
-     ```
-
-2. **Icons and Animations**:
-   - Weather icons are fetched from Weatherbit's static assets.
-   - Animations are integrated using Lottie.
-
----
-
-<!-- ## To-Do List 📝
-
-- [ ] Add hourly weather forecast.
-- [ ] Improve accessibility for voiceover users.
+- [ ] Hourly Forecast: Add hourly weather forecast.
+- [ ] Push Notifications: Add alerts for severe weather conditions.
+- [ ] Favorite Cities: Allow users to save and track multiple cities.
+- [ ] Integration with MapKit: Enable location-based weather tracking directly on maps.
 - [ ] Enhance error handling for API failures.
-- [ ] Support dark mode customization. -->
+- [ ] Support dark mode customization.
 
+
+## Acknowledgments 🤝
+
+* Weather API: Weatherbit.io
+* Animations: Lottie
 
 
 ## Contact 📬
