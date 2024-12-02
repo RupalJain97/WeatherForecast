@@ -36,8 +36,10 @@ This Weather App was developed to explore and implement various iOS technologies
 
 | **Current Weather** | **Weekly Forecast** | **Detailed Metrics** |
 |----------------------|---------------------|-----------------------|
-| ![Current Weather](link-to-image) | ![Weekly Forecast](link-to-image) | ![Detailed Metrics](link-to-image) |
+| ![Current Weather](WeatherForecast/Animations/Simulator-iPhone16Pro_simulator.png) | ![Weekly Forecast](lWeatherForecast/Animations/Simulator-iPhone16Pro_night.png) | ![Detailed Metrics](WeatherForecast/Animations/Simulator-iPhone16Pro_day.png) |
 
+Demo: 
+WeatherForecast/Animations/Weather Forecast.mp4
 ---
 
 ## Installation 🛠️
