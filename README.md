@@ -2,6 +2,9 @@
 
 A beautifully designed weather app built using **SwiftUI** that provides real-time weather updates, forecasts, and detailed weather metrics.
 
+
+Demo: 
+https://rupaljain97.github.io/assets/documents/projects/software_dev/Weather%20Forecast.mp4
 ---
 
 ## Features 🚀
