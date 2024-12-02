@@ -97,12 +97,12 @@ This Weather App was developed to explore and implement various iOS technologies
 
 ---
 
-## To-Do List 📝
+<!-- ## To-Do List 📝
 
 - [ ] Add hourly weather forecast.
 - [ ] Improve accessibility for voiceover users.
 - [ ] Enhance error handling for API failures.
-- [ ] Support dark mode customization.
+- [ ] Support dark mode customization. -->
 
 
 
