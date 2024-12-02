@@ -206,7 +206,8 @@ struct WeatherView: View {
                                     .foregroundColor(.black)
                                     .padding(.top, 20)
                                 
-                                HStack (spacing: 10) {
+//                                Spacer(minLength: 2)
+                                HStack (spacing: 30) {
                                     
                                     ForEach(viewModel.forecast) { forecastWrapper in
                                         let nextforecast = forecastWrapper.forecast
@@ -221,6 +222,7 @@ struct WeatherView: View {
                                     
                                 }
                                 .padding(.bottom, 40)
+                                .padding(.top, 10)
                             }
                         )
                         .opacity(0.85)
@@ -277,8 +279,8 @@ struct WeatherForecastView: View {
             } placeholder: {
                 ProgressView()
             }
-            .scaledToFit()
-            .frame(width: 30, height: 30)
+            .scaledToFill()
+            .frame(width: 40, height: 40)
             .padding(.bottom, 5)
             .foregroundColor(.gray)
             
