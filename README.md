@@ -1,5 +1,3 @@
-
-https://github.com/user-attachments/assets/06e4fbb3-cfda-468e-9b60-114dbfe005f5
 # Weather Forecast App 🌤️
 
 A beautifully designed weather app built using **SwiftUI** that provides real-time weather updates, forecasts, and detailed weather metrics.
@@ -7,10 +5,7 @@ A beautifully designed weather app built using **SwiftUI** that provides real-ti
 
 [Full Video here:](https://rupaljain97.github.io/assets/documents/projects/software_dev/Weather%20Forecast.mp4)
 
-https://github.com/user-attachments/assets/4e62edfd-ca24-4638-a2c7-495bbd6c86c8
-
-
-
+https://github.com/user-attachments/assets/4958f483-9bd7-4ff4-bb0b-dd183e2e2452
 
 ---
 
@@ -49,9 +44,14 @@ This Weather App was developed to explore and implement various iOS technologies
 <!-- |----------------------|---------------------|-----------------------| -->
 <!-- | ![Current Weather](WeatherForecast/Animations/Simulator-iPhone16Pro_simulator.png) | ![Weekly Forecast](lWeatherForecast/Animations/Simulator-iPhone16Pro_night.png) | ![Detailed Metrics](WeatherForecast/Animations/Simulator-iPhone16Pro_day.png) | -->
 
-![Current Weather](WeatherForecast/Animations/Simulator-iPhone16Pro_simulator.png) 
+<!-- ![Current Weather](WeatherForecast/Animations/Simulator-iPhone16Pro_simulator.png)  -->
 
-![Weekly Forecast](lWeatherForecast/Animations/Simulator-iPhone16Pro_night.png)
+<!-- ![Weekly Forecast](lWeatherForecast/Animations/Simulator-iPhone16Pro_night.png) -->
+
+<p style="dislay: flex; gap: 20px;">
+  <img src="WeatherForecast/Animations/Simulator-iPhone16Pro_simulator.png" alt="Current Weather" width="300">
+  <img src="WeatherForecast/Animations/Simulator-iPhone16Pro_night.png" alt="Weekly Forecast" width="250">
+</p>
 
 <!-- ![Detailed Metrics](WeatherForecast/Animations/Simulator-iPhone16Pro_day.png) -->
 
