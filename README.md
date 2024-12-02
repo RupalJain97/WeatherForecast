@@ -132,8 +132,8 @@ This Weather App was developed to explore and implement various iOS technologies
 
 ## Acknowledgments 🤝
 
-* Weather API: Weatherbit.io
-* Animations: Lottie
+* Weather API: [Weatherbit.io](https://www.weatherbit.io)
+* Animations: [Lottie](https://lottiefiles.com)
 
 
 ## Contact 📬
